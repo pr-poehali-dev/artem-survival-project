@@ -1,302 +1,406 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 
+/* ── Data ─────────────────────────────────────────────── */
 const GAMES = [
-  { emoji: "⛏️", tag: "Minecraft", color: "#4ade80", title: "Лучшая база для выживания", desc: "Защищённая база с фермой и порталом уже в первую неделю.", time: "8 мин", difficulty: "Средне" },
-  { emoji: "🌊", tag: "Subnautica", color: "#60a5fa", title: "Выживание в глубинах", desc: "Первые 3 часа: ресурсы, кислород, синий планшет.", time: "12 мин", difficulty: "Сложно" },
-  { emoji: "🔥", tag: "Rust", color: "#fb923c", title: "Первая ночь в Rust", desc: "Хижина, ресурсы и как не умереть от мародёров.", time: "10 мин", difficulty: "Сложно" },
-  { emoji: "🎯", tag: "CS2", color: "#facc15", title: "Топ-5 советов новичку", desc: "Прицел, отдача, движение и коммуникация.", time: "5 мин", difficulty: "Легко" },
-  { emoji: "🌱", tag: "Новичкам", color: "#4ade80", title: "С чего начать в Minecraft", desc: "Первая ночь, дерево, крафт, укрытие до рассвета.", time: "7 мин", difficulty: "Легко" },
-  { emoji: "🪓", tag: "Новичкам", color: "#fb923c", title: "Rust для самых новеньких", desc: "Крафт, строительство, первые безопасные ресурсы.", time: "11 мин", difficulty: "Легко" },
+  { emoji: "⛏️", tag: "Minecraft",           color: "#4ade80", title: "Лучшая база для выживания",  desc: "Ферма, хранилище и портал в ад уже в первую неделю.",   time: "8 мин",  diff: "Средне" },
+  { emoji: "🌊", tag: "Subnautica",          color: "#60a5fa", title: "Выживание в глубинах",       desc: "Первые 3 часа: ресурсы, кислород и синий планшет.",     time: "12 мин", diff: "Сложно" },
+  { emoji: "🔥", tag: "Rust",                color: "#fb923c", title: "Первая ночь в Rust",         desc: "Хижина, ресурсы и как не умереть от мародёров.",        time: "10 мин", diff: "Сложно" },
+  { emoji: "🎯", tag: "CS2",                 color: "#facc15", title: "Топ-5 советов новичку",      desc: "Прицел, отдача, движение и коммуникация с командой.",   time: "5 мин",  diff: "Легко"  },
+  { emoji: "🧸", tag: "Poppy Playtime",      color: "#e879f9", title: "Все боссы и секреты",       desc: "Как пройти каждый глава и не попасться Хагги Вагги.",   time: "9 мин",  diff: "Средне" },
+  { emoji: "🔫", tag: "Ready or Not",        color: "#94a3b8", title: "Тактика для новичков",      desc: "Основы тактического шутера: зачистка, команда, снаряж.", time: "11 мин", diff: "Сложно" },
+  { emoji: "⚔️", tag: "Герои М и М",         color: "#fbbf24", title: "Как выиграть кампанию",    desc: "Прокачка героев, армии и грамотная экономика замка.",    time: "14 мин", diff: "Средне" },
+  { emoji: "🌱", tag: "Новичкам",            color: "#4ade80", title: "С чего начать в Minecraft", desc: "Первая ночь, крафт инструментов, укрытие до рассвета.",  time: "7 мин",  diff: "Легко"  },
 ];
 
 const RECIPES = [
-  { emoji: "🍝", title: "Паста за 15 минут", desc: "Карбонара — минимум ингредиентов, максимум вкуса.", time: "15 мин", level: "Легко" },
-  { emoji: "🥪", title: "Тосты геймера", desc: "Хрустящие тосты с яйцом и беконом перед сессией.", time: "10 мин", level: "Легко" },
-  { emoji: "🥤", title: "Энергетический смузи", desc: "Банан, овёс, молоко и мёд — заряд на несколько часов.", time: "5 мин", level: "Легко" },
-  { emoji: "🍳", title: "Яичница с сыром", desc: "Простой и быстрый перекус в любое время суток.", time: "7 мин", level: "Легко" },
+  { emoji: "🍝", title: "Паста за 15 минут",    desc: "Карбонара — минимум ингредиентов, максимум вкуса.",     time: "15 мин" },
+  { emoji: "🥪", title: "Тосты геймера",         desc: "Хрустящие тосты с яйцом и беконом перед сессией.",     time: "10 мин" },
+  { emoji: "🥤", title: "Энергетический смузи",  desc: "Банан, овёс, молоко и мёд — заряд на несколько часов.", time: "5 мин" },
+  { emoji: "🍳", title: "Яичница с сыром",        desc: "Простой и сытный перекус в любое время суток.",         time: "7 мин" },
 ];
 
 const BOOKS = [
-  { emoji: "📖", title: "Первый игрок готовься", author: "Эрнест Клайн", desc: "Виртуальный мир, загадки и эпичные отсылки к играм 80-х.", age: "12+", type: "Роман" },
-  { emoji: "🏹", title: "Голодные игры", author: "Сюзанна Коллинз", desc: "Выживание, стратегия и борьба за жизнь — как в survival-играх.", age: "12+", type: "Трилогия" },
-  { emoji: "🚀", title: "Марсианин", author: "Энди Вейр", desc: "Человек выживает на Марсе с помощью науки и смекалки.", age: "13+", type: "Роман" },
-  { emoji: "🌌", title: "Автостопом по Галактике", author: "Дуглас Адамс", desc: "Смешная и умная книга про приключения в космосе.", age: "12+", type: "Серия" },
+  { emoji: "📖", title: "Первый игрок готовься",   author: "Эрнест Клайн",    desc: "Виртуальный мир и эпичные отсылки к играм 80-х.",    age: "12+" },
+  { emoji: "🏹", title: "Голодные игры",            author: "Сюзанна Коллинз", desc: "Выживание и стратегия — как в лучших survival-играх.", age: "12+" },
+  { emoji: "🚀", title: "Марсианин",                author: "Энди Вейр",       desc: "Выживание на Марсе с помощью науки и смекалки.",      age: "13+" },
+  { emoji: "🌌", title: "Автостопом по Галактике",  author: "Дуглас Адамс",   desc: "Смешная и умная книга про приключения в космосе.",    age: "12+" },
 ];
 
-export default function Index() {
-  const [activeSection, setActiveSection] = useState<string | null>(null);
+const DIFF_COLOR: Record<string, string> = {
+  "Легко":  "#4ade80",
+  "Средне": "#fb923c",
+  "Сложно": "#f87171",
+};
 
-  const scrollTo = (id: string) => {
-    setActiveSection(id);
+/* ── Hook: animate on scroll ─────────────────────────── */
+function useInView(threshold = 0.12) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return { ref, visible };
+}
+
+/* ── Particles ────────────────────────────────────────── */
+const PARTICLES = Array.from({ length: 20 }, (_, i) => ({
+  id: i,
+  left: `${(i * 53) % 100}%`,
+  top:  `${(i * 37) % 100}%`,
+  size: (i % 3) + 1.5,
+  delay: (i * 0.4) % 7,
+  duration: 4 + (i % 4),
+  color: ["#4ade80","#60a5fa","#b565ff","#fb923c","#facc15"][i % 5],
+  opacity: 0.12 + (i % 3) * 0.08,
+}));
+
+/* ── Component ───────────────────────────────────────── */
+export default function Index() {
+  const gamesSection  = useInView();
+  const foodSection   = useInView();
+  const booksSection  = useInView();
+  const aboutSection  = useInView();
+
+  const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
-    <div
-      className="min-h-screen text-[#1a1a1a]"
-      style={{
-        backgroundColor: "#0f1f13",
-        backgroundImage: `url('https://cdn.poehali.dev/projects/06505539-a43e-4fc8-b125-1c85c59141c8/bucket/41259bf8-2d8b-4670-b7a7-979f80545e3c.PNG')`,
-        backgroundSize: "600px",
-        backgroundRepeat: "repeat",
-        backgroundAttachment: "fixed",
-      }}
-    >
-      {/* Overlay */}
-      <div className="min-h-screen" style={{ backgroundColor: "rgba(10,20,12,0.82)" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#0d0f1a", color: "#f0f0f8" }}>
 
-        {/* HEADER */}
-        <header className="sticky top-0 z-50" style={{ backgroundColor: "rgba(10,20,12,0.9)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(212,200,160,0.15)" }}>
-          <div className="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between">
-            <span className="font-black text-xl tracking-tight text-[#d4c8a0]" style={{ fontFamily: 'Unbounded, sans-serif', letterSpacing: "-0.03em" }}>
-              Artём<span className="text-[#4ade80]">.space</span>
-            </span>
-            <nav className="hidden md:flex items-center gap-6 text-sm text-[#d4c8a0]/60">
-              {[["Игры","games"],["Кулинария","food"],["Книги","books"],["Обо мне","about"]].map(([l, id]) => (
-                <button key={id} onClick={() => scrollTo(id)} className="hover:text-[#d4c8a0] transition-colors">{l}</button>
-              ))}
-            </nav>
-            <div className="w-8 h-8 rounded-full border border-[#4ade80]/40 flex items-center justify-center text-sm">🎮</div>
-          </div>
-        </header>
+      {/* ── Particles ─────────────────────────────────── */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        {PARTICLES.map((p) => (
+          <div key={p.id} className="absolute rounded-full"
+            style={{
+              left: p.left, top: p.top,
+              width: p.size, height: p.size,
+              backgroundColor: p.color,
+              opacity: p.opacity,
+              animation: `float ${p.duration}s ${p.delay}s ease-in-out infinite`,
+            }}
+          />
+        ))}
+        {/* Ambient blobs */}
+        <div className="absolute w-[600px] h-[600px] rounded-full"
+          style={{ top: "-5%", left: "-15%", background: "radial-gradient(circle, rgba(74,222,128,0.06) 0%, transparent 70%)", animation: "blob 10s ease-in-out infinite" }} />
+        <div className="absolute w-[500px] h-[500px] rounded-full"
+          style={{ top: "35%", right: "-10%", background: "radial-gradient(circle, rgba(96,165,250,0.06) 0%, transparent 70%)", animation: "blob 12s 3s ease-in-out infinite" }} />
+        <div className="absolute w-[400px] h-[400px] rounded-full"
+          style={{ bottom: "5%", left: "25%", background: "radial-gradient(circle, rgba(181,101,255,0.05) 0%, transparent 70%)", animation: "blob 9s 6s ease-in-out infinite" }} />
+      </div>
 
-        {/* HERO */}
-        <section className="max-w-5xl mx-auto px-5 pt-16 pb-12">
-          <div className="flex flex-col gap-5">
-            <div className="inline-flex items-center gap-2 w-fit px-3 py-1.5 rounded-full text-xs font-semibold text-[#4ade80]" style={{ backgroundColor: "rgba(74,222,128,0.08)", border: "1px solid rgba(74,222,128,0.2)" }}>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80] animate-pulse" />
-              13 лет · Геймер · Повар · Читатель
-            </div>
-            <h1 className="text-5xl sm:text-7xl font-black leading-[0.95] tracking-tight text-[#d4c8a0]" style={{ fontFamily: 'Unbounded, sans-serif' }}>
-              Привет,<br />я <span className="text-[#4ade80]">Артём</span>
-            </h1>
-            <p className="text-[#d4c8a0]/55 text-lg max-w-lg leading-relaxed">
-              Играю в Rust, Minecraft, Subnautica и CS2. Готовлю вкусную еду. Читаю хорошие книги. Здесь — всё самое интересное.
-            </p>
-            <div className="flex gap-3 flex-wrap mt-2">
-              {[["Игры","games","🎮"],["Кулинария","food","🍳"],["Книги","books","📚"],["Обо мне","about","👋"]].map(([label, id, emoji]) => (
-                <button
-                  key={id}
-                  onClick={() => scrollTo(id)}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200"
-                  style={{ backgroundColor: "rgba(212,200,160,0.08)", border: "1px solid rgba(212,200,160,0.15)", color: "#d4c8a0" }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(74,222,128,0.15)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(74,222,128,0.4)"; (e.currentTarget as HTMLElement).style.color = "#4ade80"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(212,200,160,0.08)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(212,200,160,0.15)"; (e.currentTarget as HTMLElement).style.color = "#d4c8a0"; }}
-                >
-                  {emoji} {label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* DIVIDER */}
-        <div className="max-w-5xl mx-auto px-5"><div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,200,160,0.2), transparent)" }} /></div>
-
-        {/* ====== GAMES BLOCK ====== */}
-        <section id="games" className="max-w-5xl mx-auto px-5 py-16">
-          <div className="flex items-end justify-between mb-8">
-            <div>
-              <div className="text-xs font-bold text-[#4ade80]/60 uppercase tracking-widest mb-2">— блок 01</div>
-              <h2 className="text-3xl sm:text-4xl font-black text-[#d4c8a0]" style={{ fontFamily: 'Unbounded, sans-serif' }}>
-                Игры 🎮
-              </h2>
-            </div>
-            <div className="flex gap-2 text-[#d4c8a0]/30 text-sm hidden sm:flex">
-              <span className="px-2 py-1 rounded" style={{ border: "1px solid rgba(212,200,160,0.1)" }}>Rust</span>
-              <span className="px-2 py-1 rounded" style={{ border: "1px solid rgba(212,200,160,0.1)" }}>Minecraft</span>
-              <span className="px-2 py-1 rounded" style={{ border: "1px solid rgba(212,200,160,0.1)" }}>CS2</span>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {GAMES.map((g, i) => (
-              <div
-                key={i}
-                className="group cursor-pointer rounded-2xl p-5 transition-all duration-300 card-hover"
-                style={{ backgroundColor: "rgba(212,200,160,0.04)", border: "1px solid rgba(212,200,160,0.1)" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = `${g.color}40`; (e.currentTarget as HTMLElement).style.backgroundColor = `${g.color}08`; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(212,200,160,0.1)"; (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(212,200,160,0.04)"; }}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <span className="text-3xl">{g.emoji}</span>
-                  <span className="text-xs font-bold px-2 py-1 rounded-full" style={{ color: g.color, backgroundColor: `${g.color}15`, border: `1px solid ${g.color}30` }}>
-                    {g.tag}
-                  </span>
-                </div>
-                <h3 className="font-black text-[#d4c8a0] text-base mb-1.5 leading-tight group-hover:text-white transition-colors" style={{ fontFamily: 'Unbounded, sans-serif', fontSize: "0.9rem" }}>
-                  {g.title}
-                </h3>
-                <p className="text-[#d4c8a0]/45 text-sm leading-relaxed mb-4">{g.desc}</p>
-                <div className="flex items-center justify-between text-xs text-[#d4c8a0]/35">
-                  <div className="flex items-center gap-3">
-                    <span className="flex items-center gap-1"><Icon name="Clock" size={11} />{g.time}</span>
-                    <span style={{ color: g.difficulty === "Легко" ? "#4ade80" : g.difficulty === "Средне" ? "#fb923c" : "#f87171" }}>{g.difficulty}</span>
-                  </div>
-                  <span className="flex items-center gap-1 font-semibold" style={{ color: g.color }}>
-                    Читать <Icon name="ArrowRight" size={11} />
-                  </span>
-                </div>
-              </div>
+      {/* ── HEADER ────────────────────────────────────── */}
+      <header className="sticky top-0 z-50 animate-fade-in" style={{
+        backgroundColor: "rgba(13,15,26,0.88)",
+        backdropFilter: "blur(20px)",
+        borderBottom: "1px solid rgba(255,255,255,0.07)",
+      }}>
+        <div className="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between">
+          <span className="font-black text-xl text-white" style={{ fontFamily: "Unbounded, sans-serif", letterSpacing: "-0.03em" }}>
+            Artём<span className="text-[#4ade80]">.space</span>
+          </span>
+          <nav className="hidden md:flex items-center gap-6 text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>
+            {[["🎮 Игры","games"],["🍳 Кулинария","food"],["📚 Книги","books"],["👋 Обо мне","about"]].map(([l,id]) => (
+              <button key={id} onClick={() => scrollTo(id as string)} className="transition-colors hover:text-white">{l}</button>
             ))}
+          </nav>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm"
+            style={{ border: "1px solid rgba(74,222,128,0.3)", backgroundColor: "rgba(74,222,128,0.08)" }}>
+            🎮
+          </div>
+        </div>
+      </header>
+
+      <div className="relative z-10">
+
+        {/* ── HERO ──────────────────────────────────────── */}
+        <section className="max-w-5xl mx-auto px-5 pt-14 pb-16">
+          <div className="animate-fade-in-up delay-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6"
+            style={{ color: "#4ade80", backgroundColor: "rgba(74,222,128,0.1)", border: "1px solid rgba(74,222,128,0.25)" }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80]" style={{ animation: "pulse-glow 2s infinite" }} />
+            13 лет · Геймер · Повар · Читатель
+          </div>
+
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-10">
+            <div className="flex-1">
+              <h1 className="animate-fade-in-up delay-100 text-5xl sm:text-7xl font-black leading-[0.95] tracking-tight mb-5 text-white"
+                style={{ fontFamily: "Unbounded, sans-serif" }}>
+                Привет,<br />
+                я <span className="shimmer-text">Артём</span> ✌️
+              </h1>
+              <p className="animate-fade-in-up delay-200 text-lg leading-relaxed mb-8"
+                style={{ color: "rgba(255,255,255,0.65)", maxWidth: "460px" }}>
+                Играю в Rust, Minecraft, Subnautica, CS2, Poppy Playtime и «Героев». Готовлю вкусную еду. Читаю хорошие книги.
+              </p>
+              <div className="animate-fade-in-up delay-300 flex gap-3 flex-wrap">
+                {([["🎮 Игры","games","#4ade80"],["🍳 Кулинария","food","#fb923c"],["📚 Книги","books","#b565ff"],["👋 Обо мне","about","#60a5fa"]] as [string,string,string][]).map(([label,id,color]) => (
+                  <button key={id} onClick={() => scrollTo(id)}
+                    className="px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200 hover:scale-105"
+                    style={{ backgroundColor: `${color}15`, border: `1px solid ${color}30`, color }}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Spinning ring widget */}
+            <div className="animate-fade-in-up delay-400 flex-shrink-0 self-center">
+              <div className="relative w-52 h-52 flex items-center justify-center">
+                <div className="absolute inset-0 rounded-full animate-spin-slow"
+                  style={{
+                    background: "conic-gradient(from 0deg, #4ade80, #60a5fa, #b565ff, #fb923c, #4ade80)",
+                    padding: "2px",
+                    borderRadius: "50%",
+                  }}>
+                  <div className="w-full h-full rounded-full" style={{ backgroundColor: "#0d0f1a" }} />
+                </div>
+                <div className="relative z-10 text-center">
+                  <div className="text-5xl mb-2 animate-float">🎮</div>
+                  <div className="font-black text-white text-sm" style={{ fontFamily: "Unbounded, sans-serif" }}>8 игр</div>
+                  <div className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.4)" }}>в коллекции</div>
+                </div>
+                <div className="absolute -top-2 -right-3 px-2 py-1 rounded-full text-xs font-bold animate-float"
+                  style={{ backgroundColor: "#4ade80", color: "#0d0f1a", animationDelay: "1s" }}>Rust</div>
+                <div className="absolute -bottom-2 -left-3 px-2 py-1 rounded-full text-xs font-bold animate-float"
+                  style={{ backgroundColor: "#60a5fa", color: "#0d0f1a", animationDelay: "2.5s" }}>Subnautica</div>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* DIVIDER */}
-        <div className="max-w-5xl mx-auto px-5"><div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,200,160,0.2), transparent)" }} /></div>
-
-        {/* ====== FOOD BLOCK ====== */}
-        <section id="food" className="max-w-5xl mx-auto px-5 py-16">
-          <div className="mb-8">
-            <div className="text-xs font-bold text-[#fb923c]/60 uppercase tracking-widest mb-2">— блок 02</div>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#d4c8a0]" style={{ fontFamily: 'Unbounded, sans-serif' }}>
-              Кулинария 🍳
-            </h2>
-            <p className="text-[#d4c8a0]/40 text-sm mt-2">Простые и вкусные рецепты для геймеров</p>
+        {/* ── GAMES ─────────────────────────────────────── */}
+        <section id="games" ref={gamesSection.ref} className="max-w-5xl mx-auto px-5 py-16">
+          <div className={`transition-all duration-700 ${gamesSection.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(74,222,128,0.55)" }}>— блок 01</div>
+                <h2 className="text-4xl font-black text-white" style={{ fontFamily: "Unbounded, sans-serif" }}>Игры 🎮</h2>
+              </div>
+              <div className="hidden sm:flex gap-2 flex-wrap justify-end max-w-xs">
+                {["Rust","Minecraft","CS2","Subnautica"].map((g) => (
+                  <span key={g} className="px-2 py-1 rounded text-xs"
+                    style={{ color: "rgba(255,255,255,0.25)", border: "1px solid rgba(255,255,255,0.07)" }}>{g}</span>
+                ))}
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {GAMES.map((g, i) => (
+                <div key={i} className="card-hover cursor-pointer group rounded-2xl p-5"
+                  style={{
+                    backgroundColor: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    animation: gamesSection.visible ? `card-appear 0.5s ${i * 0.07}s ease both` : "none",
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.borderColor = `${g.color}50`;
+                    (e.currentTarget as HTMLElement).style.backgroundColor = `${g.color}0d`;
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)";
+                    (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.03)";
+                  }}
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <span className="text-3xl">{g.emoji}</span>
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+                      style={{ color: g.color, backgroundColor: `${g.color}18`, border: `1px solid ${g.color}30` }}>
+                      {g.tag}
+                    </span>
+                  </div>
+                  <h3 className="font-black text-white leading-tight mb-1.5"
+                    style={{ fontFamily: "Unbounded, sans-serif", fontSize: "0.82rem" }}>
+                    {g.title}
+                  </h3>
+                  <p className="leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.78rem" }}>{g.desc}</p>
+                  <div className="flex items-center justify-between" style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.3)" }}>
+                    <div className="flex items-center gap-2">
+                      <span className="flex items-center gap-1"><Icon name="Clock" size={11} />{g.time}</span>
+                      <span style={{ color: DIFF_COLOR[g.diff] }} className="font-semibold">{g.diff}</span>
+                    </div>
+                    <span className="flex items-center gap-0.5 font-bold" style={{ color: g.color }}>
+                      Читать <Icon name="ArrowRight" size={11} />
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {RECIPES.map((r, i) => (
-              <div
-                key={i}
-                className="group cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 card-hover"
-                style={{ backgroundColor: "rgba(212,200,160,0.04)", border: "1px solid rgba(212,200,160,0.1)" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(251,146,60,0.35)"; (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(251,146,60,0.06)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(212,200,160,0.1)"; (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(212,200,160,0.04)"; }}
-              >
-                {/* Color stripe */}
-                <div className="h-1" style={{ background: `linear-gradient(90deg, #fb923c, #facc15)` }} />
-                <div className="p-5">
-                  <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0" style={{ backgroundColor: "rgba(251,146,60,0.1)", border: "1px solid rgba(251,146,60,0.2)" }}>
+        </section>
+
+        <div className="max-w-5xl mx-auto px-5">
+          <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent)" }} />
+        </div>
+
+        {/* ── FOOD ──────────────────────────────────────── */}
+        <section id="food" ref={foodSection.ref} className="max-w-5xl mx-auto px-5 py-16">
+          <div className={`transition-all duration-700 ${foodSection.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            <div className="mb-8">
+              <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(251,146,60,0.55)" }}>— блок 02</div>
+              <h2 className="text-4xl font-black text-white" style={{ fontFamily: "Unbounded, sans-serif" }}>Кулинария 🍳</h2>
+              <p className="mt-2 text-sm" style={{ color: "rgba(255,255,255,0.38)" }}>Простые и вкусные рецепты для геймеров</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {RECIPES.map((r, i) => (
+                <div key={i} className="card-hover cursor-pointer group rounded-2xl overflow-hidden"
+                  style={{
+                    backgroundColor: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    animation: foodSection.visible ? `card-appear 0.5s ${i * 0.1}s ease both` : "none",
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(251,146,60,0.4)";
+                    (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(251,146,60,0.07)";
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)";
+                    (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.03)";
+                  }}
+                >
+                  <div className="h-0.5" style={{ background: "linear-gradient(90deg, #fb923c, #facc15)" }} />
+                  <div className="p-5 flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0"
+                      style={{ backgroundColor: "rgba(251,146,60,0.1)", border: "1px solid rgba(251,146,60,0.2)" }}>
                       {r.emoji}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-black text-[#d4c8a0] text-base mb-1 group-hover:text-white transition-colors" style={{ fontFamily: 'Unbounded, sans-serif', fontSize: "0.9rem" }}>
-                        {r.title}
-                      </h3>
-                      <p className="text-[#d4c8a0]/45 text-sm leading-relaxed mb-3">{r.desc}</p>
+                    <div className="flex-1">
+                      <h3 className="font-black text-white text-sm mb-1" style={{ fontFamily: "Unbounded, sans-serif" }}>{r.title}</h3>
+                      <p className="text-xs leading-relaxed mb-2" style={{ color: "rgba(255,255,255,0.42)" }}>{r.desc}</p>
                       <div className="flex items-center gap-3 text-xs">
-                        <span className="flex items-center gap-1 text-[#d4c8a0]/40"><Icon name="Clock" size={11} />{r.time}</span>
-                        <span className="text-[#4ade80] font-semibold">{r.level}</span>
-                        <span className="ml-auto flex items-center gap-1 font-semibold text-[#fb923c]">
+                        <span className="flex items-center gap-1" style={{ color: "rgba(255,255,255,0.3)" }}>
+                          <Icon name="Clock" size={11} />{r.time}
+                        </span>
+                        <span className="font-semibold" style={{ color: "#4ade80" }}>Легко</span>
+                        <span className="ml-auto flex items-center gap-1 font-bold" style={{ color: "#fb923c" }}>
                           Рецепт <Icon name="ArrowRight" size={11} />
                         </span>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* DIVIDER */}
-        <div className="max-w-5xl mx-auto px-5"><div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,200,160,0.2), transparent)" }} /></div>
-
-        {/* ====== BOOKS BLOCK ====== */}
-        <section id="books" className="max-w-5xl mx-auto px-5 py-16">
-          <div className="mb-8">
-            <div className="text-xs font-bold text-[#b565ff]/60 uppercase tracking-widest mb-2">— блок 03</div>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#d4c8a0]" style={{ fontFamily: 'Unbounded, sans-serif' }}>
-              Книги 📚
-            </h2>
-            <p className="text-[#d4c8a0]/40 text-sm mt-2">Что стоит прочитать — советую лично</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {BOOKS.map((b, i) => (
-              <div
-                key={i}
-                className="group cursor-pointer rounded-2xl p-5 flex flex-col gap-3 transition-all duration-300 card-hover"
-                style={{ backgroundColor: "rgba(212,200,160,0.04)", border: "1px solid rgba(212,200,160,0.1)" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(181,101,255,0.35)"; (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(181,101,255,0.06)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(212,200,160,0.1)"; (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(212,200,160,0.04)"; }}
-              >
-                <div className="text-4xl text-center py-2">{b.emoji}</div>
-                <div>
-                  <h3 className="font-black text-[#d4c8a0] text-sm leading-tight mb-1 group-hover:text-white transition-colors" style={{ fontFamily: 'Unbounded, sans-serif' }}>
-                    {b.title}
-                  </h3>
-                  <div className="text-[#b565ff]/70 text-xs font-semibold mb-2">{b.author}</div>
-                  <p className="text-[#d4c8a0]/40 text-xs leading-relaxed">{b.desc}</p>
-                </div>
-                <div className="flex items-center justify-between mt-auto pt-2 text-xs" style={{ borderTop: "1px solid rgba(212,200,160,0.08)" }}>
-                  <div className="flex gap-2">
-                    <span className="text-[#d4c8a0]/30">{b.type}</span>
-                    <span className="text-[#b565ff]/60 font-bold">{b.age}</span>
-                  </div>
-                  <span className="flex items-center gap-1 font-semibold text-[#b565ff]">
-                    <Icon name="ArrowRight" size={11} />
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* DIVIDER */}
-        <div className="max-w-5xl mx-auto px-5"><div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,200,160,0.2), transparent)" }} /></div>
-
-        {/* ====== ABOUT BLOCK ====== */}
-        <section id="about" className="max-w-5xl mx-auto px-5 py-16 pb-20">
-          <div className="mb-8">
-            <div className="text-xs font-bold text-[#60a5fa]/60 uppercase tracking-widest mb-2">— блок 04</div>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#d4c8a0]" style={{ fontFamily: 'Unbounded, sans-serif' }}>
-              Обо мне 👋
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Main card */}
-            <div className="rounded-2xl p-7" style={{ backgroundColor: "rgba(212,200,160,0.05)", border: "1px solid rgba(212,200,160,0.12)" }}>
-              <div className="text-5xl mb-4">🧑‍💻</div>
-              <h3 className="font-black text-[#d4c8a0] text-xl mb-3" style={{ fontFamily: 'Unbounded, sans-serif' }}>
-                Привет, я Артём!
-              </h3>
-              <p className="text-[#d4c8a0]/55 leading-relaxed text-sm">
-                Мне 13 лет. Я геймер, кулинар-любитель и книголюб. Этот сайт я сделал, чтобы делиться гайдами по играм, рецептами и книжными советами. Здесь нет нудятины — только то, что реально интересно.
-              </p>
+              ))}
             </div>
-            {/* Interests */}
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { emoji: "🎮", title: "Играю", desc: "Rust, Minecraft,\nSubnautica, CS2", color: "#4ade80" },
-                { emoji: "📚", title: "Читаю", desc: "Фантастику\nи приключения", color: "#b565ff" },
-                { emoji: "🍳", title: "Готовлю", desc: "Быстро\nи вкусно", color: "#fb923c" },
-                { emoji: "🏗️", title: "Собираю", desc: "Lego\nи конструкторы", color: "#60a5fa" },
-              ].map((item) => (
-                <div
-                  key={item.title}
-                  className="rounded-xl p-4"
-                  style={{ backgroundColor: `${item.color}08`, border: `1px solid ${item.color}20` }}
+          </div>
+        </section>
+
+        <div className="max-w-5xl mx-auto px-5">
+          <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent)" }} />
+        </div>
+
+        {/* ── BOOKS ─────────────────────────────────────── */}
+        <section id="books" ref={booksSection.ref} className="max-w-5xl mx-auto px-5 py-16">
+          <div className={`transition-all duration-700 ${booksSection.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            <div className="mb-8">
+              <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(181,101,255,0.55)" }}>— блок 03</div>
+              <h2 className="text-4xl font-black text-white" style={{ fontFamily: "Unbounded, sans-serif" }}>Книги 📚</h2>
+              <p className="mt-2 text-sm" style={{ color: "rgba(255,255,255,0.38)" }}>Что стоит прочитать — советую лично</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {BOOKS.map((b, i) => (
+                <div key={i} className="card-hover cursor-pointer group rounded-2xl p-5 flex flex-col gap-3"
+                  style={{
+                    backgroundColor: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    animation: booksSection.visible ? `card-appear 0.5s ${i * 0.1}s ease both` : "none",
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(181,101,255,0.4)";
+                    (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(181,101,255,0.07)";
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)";
+                    (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.03)";
+                  }}
                 >
-                  <div className="text-2xl mb-2">{item.emoji}</div>
-                  <div className="font-black text-sm mb-1" style={{ color: item.color, fontFamily: 'Unbounded, sans-serif', fontSize: "0.8rem" }}>{item.title}</div>
-                  <div className="text-[#d4c8a0]/40 text-xs leading-relaxed whitespace-pre-line">{item.desc}</div>
+                  <div className="text-4xl text-center py-2">{b.emoji}</div>
+                  <div>
+                    <h3 className="font-black text-white text-sm leading-tight mb-1" style={{ fontFamily: "Unbounded, sans-serif" }}>{b.title}</h3>
+                    <div className="text-xs font-semibold mb-2" style={{ color: "rgba(181,101,255,0.75)" }}>{b.author}</div>
+                    <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.38)" }}>{b.desc}</p>
+                  </div>
+                  <div className="flex items-center justify-between mt-auto pt-3"
+                    style={{ borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: "0.75rem" }}>
+                    <span className="font-bold" style={{ color: "rgba(181,101,255,0.65)" }}>{b.age}</span>
+                    <span className="flex items-center gap-1 font-bold" style={{ color: "#b565ff" }}>
+                      О книге <Icon name="ArrowRight" size={11} />
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-          {/* CTA */}
-          <div className="mt-6 rounded-2xl p-6 text-center" style={{ backgroundColor: "rgba(74,222,128,0.05)", border: "1px solid rgba(74,222,128,0.15)" }}>
-            <p className="text-[#d4c8a0]/60 text-sm mb-4">Хочешь предложить тему для гайда или рецепта?</p>
-            <button className="px-7 py-2.5 rounded-full font-bold text-sm transition-all" style={{ backgroundColor: "#4ade80", color: "#0a140c" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#86efac"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#4ade80"; }}
-            >
-              Написать мне ✉️
-            </button>
+        </section>
+
+        <div className="max-w-5xl mx-auto px-5">
+          <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent)" }} />
+        </div>
+
+        {/* ── ABOUT ─────────────────────────────────────── */}
+        <section id="about" ref={aboutSection.ref} className="max-w-5xl mx-auto px-5 py-16 pb-20">
+          <div className={`transition-all duration-700 ${aboutSection.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            <div className="mb-8">
+              <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(96,165,250,0.55)" }}>— блок 04</div>
+              <h2 className="text-4xl font-black text-white" style={{ fontFamily: "Unbounded, sans-serif" }}>Обо мне 👋</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div className="rounded-2xl p-7" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                <div className="text-5xl mb-4 animate-float">🧑‍💻</div>
+                <h3 className="font-black text-white text-xl mb-3" style={{ fontFamily: "Unbounded, sans-serif" }}>Привет, я Артём!</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.58)" }}>
+                  Мне 13 лет. Я геймер, кулинар-любитель и книголюб. Этот сайт я сделал, чтобы делиться гайдами по играм, рецептами и книжными советами. Здесь нет нудятины — только то, что реально интересно.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {([
+                  ["🎮","Играю",   "Rust, Minecraft\nSubnautica, CS2\nPoppy, HoMM", "#4ade80"],
+                  ["📚","Читаю",   "Фантастику\nи приключения",                      "#b565ff"],
+                  ["🍳","Готовлю", "Быстро\nи вкусно",                               "#fb923c"],
+                  ["🏗️","Собираю","Lego\nи конструкторы",                            "#60a5fa"],
+                ] as [string,string,string,string][]).map(([emoji, title, desc, color]) => (
+                  <div key={title} className="rounded-xl p-4 transition-transform hover:scale-105"
+                    style={{ backgroundColor: `${color}0a`, border: `1px solid ${color}20` }}>
+                    <div className="text-2xl mb-2">{emoji}</div>
+                    <div className="font-black text-sm mb-1" style={{ color, fontFamily: "Unbounded, sans-serif", fontSize: "0.78rem" }}>{title}</div>
+                    <div className="text-xs leading-relaxed whitespace-pre-line" style={{ color: "rgba(255,255,255,0.38)" }}>{desc}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="rounded-2xl p-7 text-center relative overflow-hidden gradient-border"
+              style={{ backgroundColor: "rgba(74,222,128,0.04)" }}>
+              <div className="absolute inset-0 pointer-events-none"
+                style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(74,222,128,0.08) 0%, transparent 70%)" }} />
+              <p className="relative text-sm mb-5" style={{ color: "rgba(255,255,255,0.5)" }}>
+                Хочешь предложить тему для гайда или рецепта?
+              </p>
+              <button className="relative px-7 py-3 rounded-full font-bold text-sm transition-all hover:scale-105 neon-glow-green"
+                style={{ backgroundColor: "#4ade80", color: "#0d0f1a" }}>
+                Написать мне ✉️
+              </button>
+            </div>
           </div>
         </section>
 
-        {/* FOOTER */}
-        <footer style={{ borderTop: "1px solid rgba(212,200,160,0.1)" }}>
-          <div className="max-w-5xl mx-auto px-5 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#d4c8a0]/30">
-            <span className="font-black text-[#d4c8a0]/50" style={{ fontFamily: 'Unbounded, sans-serif' }}>
-              Artём<span className="text-[#4ade80]/60">.space</span>
+        {/* ── FOOTER ────────────────────────────────────── */}
+        <footer style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+          <div className="max-w-5xl mx-auto px-5 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs"
+            style={{ color: "rgba(255,255,255,0.22)" }}>
+            <span className="font-black" style={{ fontFamily: "Unbounded, sans-serif", color: "rgba(255,255,255,0.38)" }}>
+              Artём<span style={{ color: "rgba(74,222,128,0.55)" }}>.space</span>
             </span>
             <span>Сделано с ❤️ Артёмом, 13 лет</span>
             <div className="flex gap-4">
               {[["Игры","games"],["Книги","books"],["Кулинария","food"],["Обо мне","about"]].map(([l,id]) => (
-                <button key={id} onClick={() => scrollTo(id)} className="hover:text-[#d4c8a0]/70 transition-colors">{l}</button>
+                <button key={id} onClick={() => scrollTo(id)} className="hover:text-white transition-colors">{l}</button>
               ))}
             </div>
           </div>
