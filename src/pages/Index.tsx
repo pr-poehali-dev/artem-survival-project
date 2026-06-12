@@ -1,418 +1,308 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
-const CATEGORIES = [
-  { id: "all", label: "Всё", icon: "LayoutGrid" },
-  { id: "guides", label: "Гайды", icon: "Gamepad2" },
-  { id: "tips", label: "Советы", icon: "Lightbulb" },
-  { id: "newbie", label: "Новичкам", icon: "Star" },
-  { id: "recipes", label: "Рецепты", icon: "ChefHat" },
-  { id: "books", label: "Книги", icon: "BookOpen" },
+const GAMES = [
+  { emoji: "⛏️", tag: "Minecraft", color: "#4ade80", title: "Лучшая база для выживания", desc: "Защищённая база с фермой и порталом уже в первую неделю.", time: "8 мин", difficulty: "Средне" },
+  { emoji: "🌊", tag: "Subnautica", color: "#60a5fa", title: "Выживание в глубинах", desc: "Первые 3 часа: ресурсы, кислород, синий планшет.", time: "12 мин", difficulty: "Сложно" },
+  { emoji: "🔥", tag: "Rust", color: "#fb923c", title: "Первая ночь в Rust", desc: "Хижина, ресурсы и как не умереть от мародёров.", time: "10 мин", difficulty: "Сложно" },
+  { emoji: "🎯", tag: "CS2", color: "#facc15", title: "Топ-5 советов новичку", desc: "Прицел, отдача, движение и коммуникация.", time: "5 мин", difficulty: "Легко" },
+  { emoji: "🌱", tag: "Новичкам", color: "#4ade80", title: "С чего начать в Minecraft", desc: "Первая ночь, дерево, крафт, укрытие до рассвета.", time: "7 мин", difficulty: "Легко" },
+  { emoji: "🪓", tag: "Новичкам", color: "#fb923c", title: "Rust для самых новеньких", desc: "Крафт, строительство, первые безопасные ресурсы.", time: "11 мин", difficulty: "Легко" },
 ];
 
-const POSTS = [
-  {
-    id: 1,
-    category: "guides",
-    tag: "Minecraft",
-    tagColor: "green",
-    title: "Лучшая база для выживания",
-    desc: "Как построить защищённую базу с фермой, хранилищем и порталом в ад уже в первую неделю.",
-    time: "8 мин",
-    difficulty: "Средне",
-    image: "https://cdn.poehali.dev/projects/06505539-a43e-4fc8-b125-1c85c59141c8/files/9b042e7b-9301-4fd4-9037-9b2bbd65d300.jpg",
-    emoji: "⛏️",
-  },
-  {
-    id: 2,
-    category: "guides",
-    tag: "Subnautica",
-    tagColor: "purple",
-    title: "Выживание в глубинах океана",
-    desc: "Первые 3 часа в Subnautica: где добыть материалы, как не задохнуться и найти синий планшет.",
-    time: "12 мин",
-    difficulty: "Сложно",
-    image: null,
-    emoji: "🌊",
-  },
-  {
-    id: 3,
-    category: "guides",
-    tag: "Rust",
-    tagColor: "orange",
-    title: "Первая ночь в Rust",
-    desc: "Как выжить с самого старта: где найти камень и дерево, построить хижину и не умереть от мародёров.",
-    time: "10 мин",
-    difficulty: "Сложно",
-    image: null,
-    emoji: "🔥",
-  },
-  {
-    id: 4,
-    category: "tips",
-    tag: "CS2",
-    tagColor: "orange",
-    title: "Топ-5 советов для новичков",
-    desc: "Как целиться, управлять отдачей, правильно двигаться и коммуникировать с тиммейтами.",
-    time: "5 мин",
-    difficulty: "Легко",
-    image: null,
-    emoji: "🎯",
-  },
-  {
-    id: 5,
-    category: "tips",
-    tag: "Советы",
-    tagColor: "green",
-    title: "Управление ресурсами в играх",
-    desc: "Универсальные механики, которые работают в Minecraft, Rust, Subnautica и Don't Starve.",
-    time: "6 мин",
-    difficulty: "Легко",
-    image: null,
-    emoji: "🥫",
-  },
-  {
-    id: 6,
-    category: "newbie",
-    tag: "Новичкам",
-    tagColor: "green",
-    title: "С чего начать в Minecraft",
-    desc: "Пошаговый старт: первая ночь, добыча дерева, крафт инструментов и укрытие до рассвета.",
-    time: "7 мин",
-    difficulty: "Легко",
-    image: null,
-    emoji: "🌱",
-  },
-  {
-    id: 7,
-    category: "newbie",
-    tag: "Новичкам",
-    tagColor: "purple",
-    title: "Первый час в Subnautica",
-    desc: "Не паникуй! Объясняю как работает кислород, где строить базу и почему не стоит плыть вниз.",
-    time: "9 мин",
-    difficulty: "Легко",
-    image: null,
-    emoji: "🐟",
-  },
-  {
-    id: 8,
-    category: "newbie",
-    tag: "Новичкам",
-    tagColor: "orange",
-    title: "Rust для самых новеньких",
-    desc: "Объясняю механики простыми словами: крафт, строительство, где безопасно фармить первые ресурсы.",
-    time: "11 мин",
-    difficulty: "Легко",
-    image: null,
-    emoji: "🪓",
-  },
-  {
-    id: 9,
-    category: "recipes",
-    tag: "Рецепт",
-    tagColor: "orange",
-    title: "Паста за 15 минут",
-    desc: "Быстрая паста карбонара — минимум ингредиентов, максимум вкуса. Идеально после долгой сессии.",
-    time: "15 мин",
-    difficulty: "Легко",
-    image: null,
-    emoji: "🍝",
-  },
-  {
-    id: 10,
-    category: "recipes",
-    tag: "Рецепт",
-    tagColor: "purple",
-    title: "Тосты геймера",
-    desc: "Хрустящие тосты с яйцом и беконом. Сытный завтрак перед большой игровой сессией.",
-    time: "10 мин",
-    difficulty: "Легко",
-    image: null,
-    emoji: "🥪",
-  },
-  {
-    id: 11,
-    category: "recipes",
-    tag: "Рецепт",
-    tagColor: "green",
-    title: "Энергетический смузи",
-    desc: "Банан, овёс, молоко и мёд — заряд бодрости на несколько часов игры без вреда для здоровья.",
-    time: "5 мин",
-    difficulty: "Легко",
-    image: null,
-    emoji: "🥤",
-  },
-  {
-    id: 12,
-    category: "books",
-    tag: "Книга",
-    tagColor: "purple",
-    title: "Первый игрок готовься",
-    desc: "Эрнест Клайн. Виртуальный мир, загадки, ностальгия и эпичные отсылки к играм 80-х. Обязательно!",
-    time: "Роман",
-    difficulty: "12+",
-    image: null,
-    emoji: "📖",
-  },
-  {
-    id: 13,
-    category: "books",
-    tag: "Книга",
-    tagColor: "green",
-    title: "Голодные игры",
-    desc: "Сюзанна Коллинз. Выживание, стратегия, борьба за жизнь — если любишь survival игры, зайдёт на ура.",
-    time: "Трилогия",
-    difficulty: "12+",
-    image: null,
-    emoji: "🏹",
-  },
-  {
-    id: 14,
-    category: "books",
-    tag: "Книга",
-    tagColor: "orange",
-    title: "Марсианин",
-    desc: "Энди Вейр. Один человек выживает на Марсе с помощью науки и смекалки. Реальное выживание как в играх.",
-    time: "Роман",
-    difficulty: "13+",
-    image: null,
-    emoji: "🚀",
-  },
-  {
-    id: 15,
-    category: "books",
-    tag: "Книга",
-    tagColor: "purple",
-    title: "Автостопом по Галактике",
-    desc: "Дуглас Адамс. Безумно смешная и умная книга про приключения в космосе. Идеально для тех, кто любит Subnautica.",
-    time: "Серия",
-    difficulty: "12+",
-    image: null,
-    emoji: "🌌",
-  },
+const RECIPES = [
+  { emoji: "🍝", title: "Паста за 15 минут", desc: "Карбонара — минимум ингредиентов, максимум вкуса.", time: "15 мин", level: "Легко" },
+  { emoji: "🥪", title: "Тосты геймера", desc: "Хрустящие тосты с яйцом и беконом перед сессией.", time: "10 мин", level: "Легко" },
+  { emoji: "🥤", title: "Энергетический смузи", desc: "Банан, овёс, молоко и мёд — заряд на несколько часов.", time: "5 мин", level: "Легко" },
+  { emoji: "🍳", title: "Яичница с сыром", desc: "Простой и быстрый перекус в любое время суток.", time: "7 мин", level: "Легко" },
 ];
 
-const TAG_COLORS: Record<string, { border: string; text: string; bg: string }> = {
-  green: { border: "border-[#39d353]", text: "text-[#39d353]", bg: "bg-[#39d353]/10" },
-  purple: { border: "border-[#b565ff]", text: "text-[#b565ff]", bg: "bg-[#b565ff]/10" },
-  orange: { border: "border-[#ff6b35]", text: "text-[#ff6b35]", bg: "bg-[#ff6b35]/10" },
-};
-
-const DIFFICULTY_COLORS: Record<string, string> = {
-  "Легко": "text-[#39d353]",
-  "Средне": "text-[#ff6b35]",
-  "Сложно": "text-[#b565ff]",
-  "12+": "text-[#b565ff]",
-  "13+": "text-[#ff6b35]",
-  "Роман": "text-muted-foreground",
-  "Трилогия": "text-muted-foreground",
-  "Серия": "text-muted-foreground",
-};
+const BOOKS = [
+  { emoji: "📖", title: "Первый игрок готовься", author: "Эрнест Клайн", desc: "Виртуальный мир, загадки и эпичные отсылки к играм 80-х.", age: "12+", type: "Роман" },
+  { emoji: "🏹", title: "Голодные игры", author: "Сюзанна Коллинз", desc: "Выживание, стратегия и борьба за жизнь — как в survival-играх.", age: "12+", type: "Трилогия" },
+  { emoji: "🚀", title: "Марсианин", author: "Энди Вейр", desc: "Человек выживает на Марсе с помощью науки и смекалки.", age: "13+", type: "Роман" },
+  { emoji: "🌌", title: "Автостопом по Галактике", author: "Дуглас Адамс", desc: "Смешная и умная книга про приключения в космосе.", age: "12+", type: "Серия" },
+];
 
 export default function Index() {
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeSection, setActiveSection] = useState<string | null>(null);
 
-  const filtered = activeCategory === "all"
-    ? POSTS
-    : POSTS.filter((p) => p.category === activeCategory);
+  const scrollTo = (id: string) => {
+    setActiveSection(id);
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* HEADER */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-border/50 bg-background/80">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#39d353]/20 border border-[#39d353]/40 flex items-center justify-center">
-              <Icon name="Zap" size={16} className="text-[#39d353]" />
-            </div>
-            <span className="font-black text-lg tracking-tight" style={{ fontFamily: 'Unbounded, sans-serif' }}>
-              Guide<span className="text-[#39d353]">Master</span>
+    <div
+      className="min-h-screen text-[#1a1a1a]"
+      style={{
+        backgroundColor: "#0f1f13",
+        backgroundImage: `url('https://cdn.poehali.dev/projects/06505539-a43e-4fc8-b125-1c85c59141c8/bucket/41259bf8-2d8b-4670-b7a7-979f80545e3c.PNG')`,
+        backgroundSize: "600px",
+        backgroundRepeat: "repeat",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      {/* Overlay */}
+      <div className="min-h-screen" style={{ backgroundColor: "rgba(10,20,12,0.82)" }}>
+
+        {/* HEADER */}
+        <header className="sticky top-0 z-50" style={{ backgroundColor: "rgba(10,20,12,0.9)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(212,200,160,0.15)" }}>
+          <div className="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between">
+            <span className="font-black text-xl tracking-tight text-[#d4c8a0]" style={{ fontFamily: 'Unbounded, sans-serif', letterSpacing: "-0.03em" }}>
+              Artём<span className="text-[#4ade80]">.space</span>
             </span>
+            <nav className="hidden md:flex items-center gap-6 text-sm text-[#d4c8a0]/60">
+              {[["Игры","games"],["Кулинария","food"],["Книги","books"],["Обо мне","about"]].map(([l, id]) => (
+                <button key={id} onClick={() => scrollTo(id)} className="hover:text-[#d4c8a0] transition-colors">{l}</button>
+              ))}
+            </nav>
+            <div className="w-8 h-8 rounded-full border border-[#4ade80]/40 flex items-center justify-center text-sm">🎮</div>
           </div>
-          <nav className="hidden md:flex items-center gap-5 text-sm text-muted-foreground">
-            {[
-              { label: "Гайды", cat: "guides" },
-              { label: "Советы", cat: "tips" },
-              { label: "Новичкам", cat: "newbie" },
-              { label: "Рецепты", cat: "recipes" },
-              { label: "Книги", cat: "books" },
-            ].map((n) => (
-              <a
-                key={n.cat}
-                href="#content"
-                onClick={() => setActiveCategory(n.cat)}
-                className="hover:text-foreground transition-colors"
-              >
-                {n.label}
-              </a>
-            ))}
-          </nav>
-          <button className="px-4 py-2 rounded-lg bg-[#39d353] text-black text-sm font-bold hover:bg-[#39d353]/90 transition-all neon-glow-green">
-            Подписаться
-          </button>
-        </div>
-      </header>
+        </header>
 
-      {/* HERO */}
-      <section className="relative overflow-hidden pt-20 pb-24 px-4">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#39d353]/8 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#b565ff]/8 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute top-1/2 left-0 w-64 h-64 bg-[#ff6b35]/5 rounded-full blur-[100px] pointer-events-none" />
-
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="flex flex-col items-center text-center gap-6">
-            <div className="animate-fade-in-up opacity-0 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#39d353]/30 bg-[#39d353]/5 text-[#39d353] text-sm font-medium">
-              <span className="w-2 h-2 rounded-full bg-[#39d353] animate-pulse-glow" />
-              Авторские гайды от Артёма
+        {/* HERO */}
+        <section className="max-w-5xl mx-auto px-5 pt-16 pb-12">
+          <div className="flex flex-col gap-5">
+            <div className="inline-flex items-center gap-2 w-fit px-3 py-1.5 rounded-full text-xs font-semibold text-[#4ade80]" style={{ backgroundColor: "rgba(74,222,128,0.08)", border: "1px solid rgba(74,222,128,0.2)" }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80] animate-pulse" />
+              13 лет · Геймер · Повар · Читатель
             </div>
-
-            <h1 className="animate-fade-in-up opacity-0 delay-100 text-4xl sm:text-6xl md:text-7xl font-black leading-[1.05] tracking-tight max-w-4xl">
-              Играй лучше.
-              <br />
-              <span className="text-[#39d353]">Читай. Готовь.</span>
+            <h1 className="text-5xl sm:text-7xl font-black leading-[0.95] tracking-tight text-[#d4c8a0]" style={{ fontFamily: 'Unbounded, sans-serif' }}>
+              Привет,<br />я <span className="text-[#4ade80]">Артём</span>
             </h1>
-
-            <p className="animate-fade-in-up opacity-0 delay-200 text-muted-foreground text-lg max-w-xl leading-relaxed">
-              Гайды по Rust, Minecraft, Subnautica и CS2, советы новичкам, рецепты для геймеров и книги, которые стоит прочитать.
+            <p className="text-[#d4c8a0]/55 text-lg max-w-lg leading-relaxed">
+              Играю в Rust, Minecraft, Subnautica и CS2. Готовлю вкусную еду. Читаю хорошие книги. Здесь — всё самое интересное.
             </p>
-
-            {/* Game tags */}
-            <div className="animate-fade-in-up opacity-0 delay-300 flex flex-wrap justify-center gap-2">
-              {["⚒️ Minecraft", "🌊 Subnautica", "🔥 Rust", "🎯 CS2"].map((g) => (
-                <span key={g} className="px-3 py-1 rounded-full bg-secondary border border-border text-sm text-muted-foreground">
-                  {g}
-                </span>
-              ))}
-            </div>
-
-            <div className="animate-fade-in-up opacity-0 delay-400 flex items-center gap-8 mt-2">
-              {[
-                { val: "15+", label: "материалов" },
-                { val: "4", label: "игры" },
-                { val: "4", label: "книги" },
-              ].map((s) => (
-                <div key={s.label} className="text-center">
-                  <div className="text-2xl font-black text-[#39d353]">{s.val}</div>
-                  <div className="text-xs text-muted-foreground uppercase tracking-widest">{s.label}</div>
-                </div>
+            <div className="flex gap-3 flex-wrap mt-2">
+              {[["Игры","games","🎮"],["Кулинария","food","🍳"],["Книги","books","📚"],["Обо мне","about","👋"]].map(([label, id, emoji]) => (
+                <button
+                  key={id}
+                  onClick={() => scrollTo(id)}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200"
+                  style={{ backgroundColor: "rgba(212,200,160,0.08)", border: "1px solid rgba(212,200,160,0.15)", color: "#d4c8a0" }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(74,222,128,0.15)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(74,222,128,0.4)"; (e.currentTarget as HTMLElement).style.color = "#4ade80"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(212,200,160,0.08)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(212,200,160,0.15)"; (e.currentTarget as HTMLElement).style.color = "#d4c8a0"; }}
+                >
+                  {emoji} {label}
+                </button>
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* FILTER TABS */}
-      <section id="content" className="max-w-6xl mx-auto px-4 sm:px-6 mb-10">
-        <div className="flex gap-2 flex-wrap">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border transition-all duration-200 ${
-                activeCategory === cat.id
-                  ? "bg-[#39d353] text-black border-[#39d353] neon-glow-green"
-                  : "bg-card text-muted-foreground border-border hover:border-[#39d353]/50 hover:text-foreground"
-              }`}
-            >
-              <Icon name={cat.icon as "LayoutGrid"} size={15} />
-              {cat.label}
-            </button>
-          ))}
-        </div>
-      </section>
+        {/* DIVIDER */}
+        <div className="max-w-5xl mx-auto px-5"><div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,200,160,0.2), transparent)" }} /></div>
 
-      {/* CARDS GRID */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.map((post, i) => {
-            const colors = TAG_COLORS[post.tagColor];
-            const isBook = post.category === "books";
-            return (
-              <article
-                key={post.id}
-                className="card-hover cursor-pointer group bg-card border border-border rounded-2xl overflow-hidden"
+        {/* ====== GAMES BLOCK ====== */}
+        <section id="games" className="max-w-5xl mx-auto px-5 py-16">
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <div className="text-xs font-bold text-[#4ade80]/60 uppercase tracking-widest mb-2">— блок 01</div>
+              <h2 className="text-3xl sm:text-4xl font-black text-[#d4c8a0]" style={{ fontFamily: 'Unbounded, sans-serif' }}>
+                Игры 🎮
+              </h2>
+            </div>
+            <div className="flex gap-2 text-[#d4c8a0]/30 text-sm hidden sm:flex">
+              <span className="px-2 py-1 rounded" style={{ border: "1px solid rgba(212,200,160,0.1)" }}>Rust</span>
+              <span className="px-2 py-1 rounded" style={{ border: "1px solid rgba(212,200,160,0.1)" }}>Minecraft</span>
+              <span className="px-2 py-1 rounded" style={{ border: "1px solid rgba(212,200,160,0.1)" }}>CS2</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {GAMES.map((g, i) => (
+              <div
+                key={i}
+                className="group cursor-pointer rounded-2xl p-5 transition-all duration-300 card-hover"
+                style={{ backgroundColor: "rgba(212,200,160,0.04)", border: "1px solid rgba(212,200,160,0.1)" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = `${g.color}40`; (e.currentTarget as HTMLElement).style.backgroundColor = `${g.color}08`; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(212,200,160,0.1)"; (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(212,200,160,0.04)"; }}
               >
-                {/* Image / Emoji block */}
-                <div className={`relative overflow-hidden bg-secondary flex items-center justify-center ${isBook ? "h-36" : "h-44"}`}>
-                  {post.image ? (
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : (
-                    <span className="text-7xl animate-float" style={{ animationDelay: `${i * 0.3}s` }}>
-                      {post.emoji}
-                    </span>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
-                  <div className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold border ${colors.border} ${colors.text} ${colors.bg} backdrop-blur-sm`}>
-                    {post.tag}
-                  </div>
+                <div className="flex items-start justify-between mb-3">
+                  <span className="text-3xl">{g.emoji}</span>
+                  <span className="text-xs font-bold px-2 py-1 rounded-full" style={{ color: g.color, backgroundColor: `${g.color}15`, border: `1px solid ${g.color}30` }}>
+                    {g.tag}
+                  </span>
                 </div>
-
-                {/* Content */}
-                <div className="p-5">
-                  <h2 className="font-black text-base leading-tight mb-2 group-hover:text-[#39d353] transition-colors">
-                    {post.title}
-                  </h2>
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-2">
-                    {post.desc}
-                  </p>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <Icon name={isBook ? "BookOpen" : "Clock"} size={12} />
-                        {post.time}
-                      </span>
-                      <span className={`font-semibold ${DIFFICULTY_COLORS[post.difficulty] ?? "text-muted-foreground"}`}>
-                        {post.difficulty}
-                      </span>
-                    </div>
-                    <button className="flex items-center gap-1.5 text-xs font-bold text-[#39d353] hover:gap-2.5 transition-all">
-                      {isBook ? "О книге" : "Читать"}
-                      <Icon name="ArrowRight" size={13} />
-                    </button>
+                <h3 className="font-black text-[#d4c8a0] text-base mb-1.5 leading-tight group-hover:text-white transition-colors" style={{ fontFamily: 'Unbounded, sans-serif', fontSize: "0.9rem" }}>
+                  {g.title}
+                </h3>
+                <p className="text-[#d4c8a0]/45 text-sm leading-relaxed mb-4">{g.desc}</p>
+                <div className="flex items-center justify-between text-xs text-[#d4c8a0]/35">
+                  <div className="flex items-center gap-3">
+                    <span className="flex items-center gap-1"><Icon name="Clock" size={11} />{g.time}</span>
+                    <span style={{ color: g.difficulty === "Легко" ? "#4ade80" : g.difficulty === "Средне" ? "#fb923c" : "#f87171" }}>{g.difficulty}</span>
                   </div>
+                  <span className="flex items-center gap-1 font-semibold" style={{ color: g.color }}>
+                    Читать <Icon name="ArrowRight" size={11} />
+                  </span>
                 </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* CTA Banner */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
-        <div className="relative rounded-2xl overflow-hidden border border-[#39d353]/30 bg-[#39d353]/5 p-10 text-center">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#39d353]/5 via-transparent to-[#b565ff]/5 pointer-events-none" />
-          <h3 className="relative text-2xl sm:text-3xl font-black mb-3">
-            Есть идея? 🎮
-          </h3>
-          <p className="relative text-muted-foreground mb-6 max-w-md mx-auto">
-            Хочешь гайд по конкретной игре, рецепт или совет по книге — напиши, и я добавлю!
-          </p>
-          <button className="relative px-8 py-3 rounded-xl bg-[#39d353] text-black font-bold hover:bg-[#39d353]/90 transition-all neon-glow-green">
-            Предложить тему
-          </button>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="border-t border-border/50 py-8 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <span className="font-black" style={{ fontFamily: 'Unbounded, sans-serif' }}>
-            Guide<span className="text-[#39d353]">Master</span>
-          </span>
-          <span>Сделано с ❤️ Артёмом, 13 лет</span>
-          <div className="flex gap-5">
-            <a href="#content" onClick={() => setActiveCategory("guides")} className="hover:text-foreground transition-colors cursor-pointer">Гайды</a>
-            <a href="#content" onClick={() => setActiveCategory("recipes")} className="hover:text-foreground transition-colors cursor-pointer">Рецепты</a>
-            <a href="#content" onClick={() => setActiveCategory("books")} className="hover:text-foreground transition-colors cursor-pointer">Книги</a>
+              </div>
+            ))}
           </div>
-        </div>
-      </footer>
+        </section>
+
+        {/* DIVIDER */}
+        <div className="max-w-5xl mx-auto px-5"><div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,200,160,0.2), transparent)" }} /></div>
+
+        {/* ====== FOOD BLOCK ====== */}
+        <section id="food" className="max-w-5xl mx-auto px-5 py-16">
+          <div className="mb-8">
+            <div className="text-xs font-bold text-[#fb923c]/60 uppercase tracking-widest mb-2">— блок 02</div>
+            <h2 className="text-3xl sm:text-4xl font-black text-[#d4c8a0]" style={{ fontFamily: 'Unbounded, sans-serif' }}>
+              Кулинария 🍳
+            </h2>
+            <p className="text-[#d4c8a0]/40 text-sm mt-2">Простые и вкусные рецепты для геймеров</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {RECIPES.map((r, i) => (
+              <div
+                key={i}
+                className="group cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 card-hover"
+                style={{ backgroundColor: "rgba(212,200,160,0.04)", border: "1px solid rgba(212,200,160,0.1)" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(251,146,60,0.35)"; (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(251,146,60,0.06)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(212,200,160,0.1)"; (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(212,200,160,0.04)"; }}
+              >
+                {/* Color stripe */}
+                <div className="h-1" style={{ background: `linear-gradient(90deg, #fb923c, #facc15)` }} />
+                <div className="p-5">
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0" style={{ backgroundColor: "rgba(251,146,60,0.1)", border: "1px solid rgba(251,146,60,0.2)" }}>
+                      {r.emoji}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-black text-[#d4c8a0] text-base mb-1 group-hover:text-white transition-colors" style={{ fontFamily: 'Unbounded, sans-serif', fontSize: "0.9rem" }}>
+                        {r.title}
+                      </h3>
+                      <p className="text-[#d4c8a0]/45 text-sm leading-relaxed mb-3">{r.desc}</p>
+                      <div className="flex items-center gap-3 text-xs">
+                        <span className="flex items-center gap-1 text-[#d4c8a0]/40"><Icon name="Clock" size={11} />{r.time}</span>
+                        <span className="text-[#4ade80] font-semibold">{r.level}</span>
+                        <span className="ml-auto flex items-center gap-1 font-semibold text-[#fb923c]">
+                          Рецепт <Icon name="ArrowRight" size={11} />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* DIVIDER */}
+        <div className="max-w-5xl mx-auto px-5"><div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,200,160,0.2), transparent)" }} /></div>
+
+        {/* ====== BOOKS BLOCK ====== */}
+        <section id="books" className="max-w-5xl mx-auto px-5 py-16">
+          <div className="mb-8">
+            <div className="text-xs font-bold text-[#b565ff]/60 uppercase tracking-widest mb-2">— блок 03</div>
+            <h2 className="text-3xl sm:text-4xl font-black text-[#d4c8a0]" style={{ fontFamily: 'Unbounded, sans-serif' }}>
+              Книги 📚
+            </h2>
+            <p className="text-[#d4c8a0]/40 text-sm mt-2">Что стоит прочитать — советую лично</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {BOOKS.map((b, i) => (
+              <div
+                key={i}
+                className="group cursor-pointer rounded-2xl p-5 flex flex-col gap-3 transition-all duration-300 card-hover"
+                style={{ backgroundColor: "rgba(212,200,160,0.04)", border: "1px solid rgba(212,200,160,0.1)" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(181,101,255,0.35)"; (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(181,101,255,0.06)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(212,200,160,0.1)"; (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(212,200,160,0.04)"; }}
+              >
+                <div className="text-4xl text-center py-2">{b.emoji}</div>
+                <div>
+                  <h3 className="font-black text-[#d4c8a0] text-sm leading-tight mb-1 group-hover:text-white transition-colors" style={{ fontFamily: 'Unbounded, sans-serif' }}>
+                    {b.title}
+                  </h3>
+                  <div className="text-[#b565ff]/70 text-xs font-semibold mb-2">{b.author}</div>
+                  <p className="text-[#d4c8a0]/40 text-xs leading-relaxed">{b.desc}</p>
+                </div>
+                <div className="flex items-center justify-between mt-auto pt-2 text-xs" style={{ borderTop: "1px solid rgba(212,200,160,0.08)" }}>
+                  <div className="flex gap-2">
+                    <span className="text-[#d4c8a0]/30">{b.type}</span>
+                    <span className="text-[#b565ff]/60 font-bold">{b.age}</span>
+                  </div>
+                  <span className="flex items-center gap-1 font-semibold text-[#b565ff]">
+                    <Icon name="ArrowRight" size={11} />
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* DIVIDER */}
+        <div className="max-w-5xl mx-auto px-5"><div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,200,160,0.2), transparent)" }} /></div>
+
+        {/* ====== ABOUT BLOCK ====== */}
+        <section id="about" className="max-w-5xl mx-auto px-5 py-16 pb-20">
+          <div className="mb-8">
+            <div className="text-xs font-bold text-[#60a5fa]/60 uppercase tracking-widest mb-2">— блок 04</div>
+            <h2 className="text-3xl sm:text-4xl font-black text-[#d4c8a0]" style={{ fontFamily: 'Unbounded, sans-serif' }}>
+              Обо мне 👋
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Main card */}
+            <div className="rounded-2xl p-7" style={{ backgroundColor: "rgba(212,200,160,0.05)", border: "1px solid rgba(212,200,160,0.12)" }}>
+              <div className="text-5xl mb-4">🧑‍💻</div>
+              <h3 className="font-black text-[#d4c8a0] text-xl mb-3" style={{ fontFamily: 'Unbounded, sans-serif' }}>
+                Привет, я Артём!
+              </h3>
+              <p className="text-[#d4c8a0]/55 leading-relaxed text-sm">
+                Мне 13 лет. Я геймер, кулинар-любитель и книголюб. Этот сайт я сделал, чтобы делиться гайдами по играм, рецептами и книжными советами. Здесь нет нудятины — только то, что реально интересно.
+              </p>
+            </div>
+            {/* Interests */}
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { emoji: "🎮", title: "Играю", desc: "Rust, Minecraft,\nSubnautica, CS2", color: "#4ade80" },
+                { emoji: "📚", title: "Читаю", desc: "Фантастику\nи приключения", color: "#b565ff" },
+                { emoji: "🍳", title: "Готовлю", desc: "Быстро\nи вкусно", color: "#fb923c" },
+                { emoji: "🏗️", title: "Собираю", desc: "Lego\nи конструкторы", color: "#60a5fa" },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-xl p-4"
+                  style={{ backgroundColor: `${item.color}08`, border: `1px solid ${item.color}20` }}
+                >
+                  <div className="text-2xl mb-2">{item.emoji}</div>
+                  <div className="font-black text-sm mb-1" style={{ color: item.color, fontFamily: 'Unbounded, sans-serif', fontSize: "0.8rem" }}>{item.title}</div>
+                  <div className="text-[#d4c8a0]/40 text-xs leading-relaxed whitespace-pre-line">{item.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* CTA */}
+          <div className="mt-6 rounded-2xl p-6 text-center" style={{ backgroundColor: "rgba(74,222,128,0.05)", border: "1px solid rgba(74,222,128,0.15)" }}>
+            <p className="text-[#d4c8a0]/60 text-sm mb-4">Хочешь предложить тему для гайда или рецепта?</p>
+            <button className="px-7 py-2.5 rounded-full font-bold text-sm transition-all" style={{ backgroundColor: "#4ade80", color: "#0a140c" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#86efac"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#4ade80"; }}
+            >
+              Написать мне ✉️
+            </button>
+          </div>
+        </section>
+
+        {/* FOOTER */}
+        <footer style={{ borderTop: "1px solid rgba(212,200,160,0.1)" }}>
+          <div className="max-w-5xl mx-auto px-5 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#d4c8a0]/30">
+            <span className="font-black text-[#d4c8a0]/50" style={{ fontFamily: 'Unbounded, sans-serif' }}>
+              Artём<span className="text-[#4ade80]/60">.space</span>
+            </span>
+            <span>Сделано с ❤️ Артёмом, 13 лет</span>
+            <div className="flex gap-4">
+              {[["Игры","games"],["Книги","books"],["Кулинария","food"],["Обо мне","about"]].map(([l,id]) => (
+                <button key={id} onClick={() => scrollTo(id)} className="hover:text-[#d4c8a0]/70 transition-colors">{l}</button>
+              ))}
+            </div>
+          </div>
+        </footer>
+
+      </div>
     </div>
   );
 }
