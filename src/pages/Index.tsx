@@ -339,6 +339,24 @@ const BOOKS = [
   { emoji: "🌌", title: "Автостопом по Галактике",  author: "Дуглас Адамс",   desc: "Смешная и умная книга про приключения в космосе.",    age: "12+" },
 ];
 
+const KURT_COBAIN = {
+  name: "Курт Кобейн",
+  years: "1967 – 1994",
+  role: "Вокал, гитара — Nirvana",
+  emoji: "🎸",
+  color: "#f87171",
+  facts: [
+    "Родился 20 февраля 1967 года в Абердине, США. Маленький город, скучная жизнь — он спасался музыкой.",
+    "В 14 лет получил первую гитару и сразу начал сочинять. Учился сам, по слуху.",
+    "Основал Nirvana в 1987 году вместе с Крисом Новоселичем. Название придумал потому что хотел что-то красивое и успокаивающее.",
+    "Альбом Nevermind (1991) взорвал весь мир. Smells Like Teen Spirit стал гимном поколения за одну ночь.",
+    "Терпеть не мог славу и толпы фанатов. Говорил, что хочет просто играть музыку, а не быть звездой.",
+    "Рисовал, лепил, интересовался искусством. Был не просто музыкантом, а творцом во всём.",
+  ],
+  quote: "«Лучше сгореть ярко, чем медленно угасать»",
+  legacy: "Nirvana изменила рок навсегда. До них был попсовый хэви-метал, после — всё стало честнее, грубее, настоящее. Курт доказал, что можно быть собой и при этом стать легендой.",
+};
+
 const MUSIC_GENRES = [
   {
     emoji: "🎸",
@@ -346,7 +364,12 @@ const MUSIC_GENRES = [
     color: "#f87171",
     desc: "Энергия, гитары и драйв",
     artists: ["AC/DC", "Nirvana", "Queen", "Metallica (ранний)"],
-    tracks: ["Bohemian Rhapsody — Queen", "Smells Like Teen Spirit — Nirvana", "Back in Black — AC/DC", "Highway to Hell — AC/DC"],
+    tracks: [
+      { title: "Bohemian Rhapsody — Queen",        ytId: "fJ9rUzIMcZQ" },
+      { title: "Smells Like Teen Spirit — Nirvana", ytId: "hTWKbfoikeg" },
+      { title: "Back in Black — AC/DC",             ytId: "pAgnJDJN4VA" },
+      { title: "Highway to Hell — AC/DC",           ytId: "l482T0yNkeo" },
+    ],
     vibe: "Включай когда хочется адреналина или нужно взбодриться. Идеально под Rust и CS2.",
   },
   {
@@ -355,7 +378,12 @@ const MUSIC_GENRES = [
     color: "#94a3b8",
     desc: "Мощь, скорость, тяжесть",
     artists: ["Metallica", "Slipknot", "System of a Down", "Rammstein"],
-    tracks: ["Master of Puppets — Metallica", "Chop Suey! — SOAD", "Enter Sandman — Metallica", "Du Hast — Rammstein"],
+    tracks: [
+      { title: "Master of Puppets — Metallica", ytId: "xopY5L_bgFQ" },
+      { title: "Chop Suey! — SOAD",             ytId: "CSvFpBOe8eY" },
+      { title: "Enter Sandman — Metallica",      ytId: "CD-E-LDc384" },
+      { title: "Du Hast — Rammstein",            ytId: "W3q8Od5qJio" },
+    ],
     vibe: "Для самых напряжённых моментов в игре. Когда тебя рейдят в Rust — включай это.",
   },
   {
@@ -364,7 +392,12 @@ const MUSIC_GENRES = [
     color: "#fbbf24",
     desc: "Атмосфера, импровизация, стиль",
     artists: ["Miles Davis", "John Coltrane", "Louis Armstrong", "Dave Brubeck"],
-    tracks: ["So What — Miles Davis", "Take Five — Dave Brubeck", "What a Wonderful World — Armstrong", "My Favorite Things — Coltrane"],
+    tracks: [
+      { title: "So What — Miles Davis",                  ytId: "ylXk1LBvIqU" },
+      { title: "Take Five — Dave Brubeck",               ytId: "vmDDOFXSgAs" },
+      { title: "What a Wonderful World — Armstrong",     ytId: "CWzrABouyeE" },
+      { title: "My Favorite Things — Coltrane",          ytId: "qWG2dsXV5HI" },
+    ],
     vibe: "Для чтения книг, готовки или просто спокойного вечера. Создаёт особую атмосферу.",
   },
   {
@@ -373,7 +406,12 @@ const MUSIC_GENRES = [
     color: "#e879f9",
     desc: "Ритм, бас, groove",
     artists: ["Soudiere", "Kordhell", "SXMPXSON", "Night Lovell"],
-    tracks: ["Murder in My Mind — Kordhell", "Freak — Soudiere", "Dark Light — SXMPXSON", "Contraband — Night Lovell"],
+    tracks: [
+      { title: "Murder in My Mind — Kordhell",   ytId: "ZHBFQYsJQJE" },
+      { title: "Freak — Soudiere",               ytId: "TyBPRfJfMys" },
+      { title: "Dark Light — SXMPXSON",          ytId: "Hp_VPFtgTuY" },
+      { title: "Contraband — Night Lovell",       ytId: "AkP4sEoXKu8" },
+    ],
     vibe: "Лучший жанр для ночных сессий в Minecraft или когда просто надо почувствовать себя крутым.",
   },
   {
@@ -382,7 +420,12 @@ const MUSIC_GENRES = [
     color: "#60a5fa",
     desc: "Саундтреки, которые цепляют",
     artists: ["Hans Zimmer", "John Williams", "Ennio Morricone", "Howard Shore"],
-    tracks: ["Interstellar Main Theme — Zimmer", "Imperial March — Williams", "The Good The Bad — Morricone", "Concerning Hobbits — Shore"],
+    tracks: [
+      { title: "Interstellar Main Theme — Zimmer",   ytId: "UDVtMYqUAyw" },
+      { title: "Imperial March — Williams",           ytId: "3LXVAn56YI8" },
+      { title: "The Good The Bad — Morricone",        ytId: "h1PfrmgVZPU" },
+      { title: "Concerning Hobbits — Shore",          ytId: "FHU2o0LxVQY" },
+    ],
     vibe: "Для эпичных моментов. Под «Героев Меча и Магии» или чтение — самое то. Мурашки гарантированы.",
   },
 ];
@@ -417,6 +460,7 @@ const BG_URL = "https://cdn.poehali.dev/projects/06505539-a43e-4fc8-b125-1c85c59
 export default function Index() {
   const [modal, setModal] = useState<ModalData | null>(null);
   const [expandedMusic, setExpandedMusic] = useState<string | null>(null);
+  const [playingTrack, setPlayingTrack] = useState<{ ytId: string; title: string; color: string } | null>(null);
   const gamesSection  = useInView();
   const foodSection   = useInView();
   const booksSection  = useInView();
@@ -678,23 +722,50 @@ export default function Index() {
               <div className="mb-8">
                 <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(248,113,113,0.55)" }}>— блок 04</div>
                 <h2 className="text-4xl font-black text-white" style={{ fontFamily: "Unbounded, sans-serif" }}>Музыка 🎵</h2>
-                <p className="mt-2 text-sm" style={{ color: "rgba(255,255,255,0.38)" }}>Нажми на жанр — покажу треки и под что слушать</p>
+                <p className="mt-2 text-sm" style={{ color: "rgba(255,255,255,0.38)" }}>Нажми на трек — он заиграет прямо здесь</p>
               </div>
-              <div className="flex flex-col gap-3">
+
+              {/* Mini player — sticky */}
+              {playingTrack && (
+                <div className="mb-6 rounded-2xl overflow-hidden animate-fade-in-up" style={{ border: `1px solid ${playingTrack.color}40`, backgroundColor: `${playingTrack.color}08` }}>
+                  <div className="flex items-center gap-3 px-4 py-3" style={{ borderBottom: `1px solid ${playingTrack.color}20` }}>
+                    <span className="text-lg animate-float">🎵</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-bold text-white truncate">{playingTrack.title}</div>
+                      <div className="text-xs" style={{ color: "rgba(255,255,255,0.38)" }}>Сейчас играет</div>
+                    </div>
+                    <button onClick={() => setPlayingTrack(null)} className="text-xs px-3 py-1 rounded-full transition-colors hover:bg-white/10"
+                      style={{ color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                      ✕ Стоп
+                    </button>
+                  </div>
+                  <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                    <iframe
+                      className="absolute inset-0 w-full h-full"
+                      src={`https://www.youtube.com/embed/${playingTrack.ytId}?autoplay=1&rel=0`}
+                      allow="autoplay; encrypted-media"
+                      allowFullScreen
+                      title={playingTrack.title}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Genre accordions */}
+              <div className="flex flex-col gap-3 mb-10">
                 {MUSIC_GENRES.map((m, i) => {
                   const isOpen = expandedMusic === m.genre;
                   return (
                     <div key={i}
-                      className="rounded-2xl overflow-hidden cursor-pointer transition-all duration-300"
+                      className="rounded-2xl overflow-hidden transition-all duration-300"
                       style={{
                         backgroundColor: isOpen ? `${m.color}0d` : "rgba(255,255,255,0.03)",
                         border: `1px solid ${isOpen ? m.color + "40" : "rgba(255,255,255,0.08)"}`,
                         animation: musicSection.visible ? `card-appear 0.4s ${i * 0.08}s ease both` : "none",
                       }}
-                      onClick={() => setExpandedMusic(isOpen ? null : m.genre)}
                     >
-                      {/* Header row */}
-                      <div className="flex items-center gap-4 p-4">
+                      {/* Header */}
+                      <div className="flex items-center gap-4 p-4 cursor-pointer" onClick={() => setExpandedMusic(isOpen ? null : m.genre)}>
                         <div className="w-11 h-11 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
                           style={{ backgroundColor: `${m.color}15`, border: `1px solid ${m.color}25` }}>
                           {m.emoji}
@@ -704,15 +775,14 @@ export default function Index() {
                             <span className="font-black text-white text-sm" style={{ fontFamily: "Unbounded, sans-serif" }}>{m.genre}</span>
                             <span className="text-xs px-2 py-0.5 rounded-full font-semibold"
                               style={{ color: m.color, backgroundColor: `${m.color}15`, border: `1px solid ${m.color}25` }}>
-                              {m.artists.length} артиста
+                              {m.tracks.length} трека
                             </span>
                           </div>
                           <p className="text-xs" style={{ color: "rgba(255,255,255,0.38)" }}>{m.desc}</p>
                         </div>
-                        {/* Tags */}
                         <div className="hidden sm:flex gap-1.5 flex-shrink-0">
                           {m.artists.slice(0,2).map((a) => (
-                            <span key={a} className="text-xs px-2 py-0.5 rounded-full" style={{ color: "rgba(255,255,255,0.3)", border: "1px solid rgba(255,255,255,0.07)" }}>{a}</span>
+                            <span key={a} className="text-xs px-2 py-0.5 rounded-full" style={{ color: "rgba(255,255,255,0.28)", border: "1px solid rgba(255,255,255,0.07)" }}>{a}</span>
                           ))}
                         </div>
                         <div className="flex-shrink-0 ml-2 transition-transform duration-300" style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", color: m.color }}>
@@ -720,29 +790,39 @@ export default function Index() {
                         </div>
                       </div>
 
-                      {/* Expanded content */}
+                      {/* Tracks list */}
                       {isOpen && (
                         <div className="px-4 pb-5" style={{ borderTop: `1px solid ${m.color}20` }}>
                           <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {/* Tracks */}
                             <div>
-                              <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: `${m.color}80` }}>🎵 Треки</div>
+                              <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: `${m.color}80` }}>▶ Нажми — заиграет</div>
                               <div className="flex flex-col gap-2">
-                                {m.tracks.map((t, ti) => (
-                                  <div key={ti} className="flex items-center gap-3 p-2.5 rounded-xl"
-                                    style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
-                                    <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0"
-                                      style={{ backgroundColor: `${m.color}20`, color: m.color }}>{ti + 1}</span>
-                                    <span className="text-xs text-white/70">{t}</span>
-                                  </div>
-                                ))}
+                                {m.tracks.map((t, ti) => {
+                                  const isPlaying = playingTrack?.ytId === t.ytId;
+                                  return (
+                                    <button key={ti}
+                                      onClick={() => setPlayingTrack(isPlaying ? null : { ytId: t.ytId, title: t.title, color: m.color })}
+                                      className="flex items-center gap-3 p-2.5 rounded-xl w-full text-left transition-all duration-200 group"
+                                      style={{
+                                        backgroundColor: isPlaying ? `${m.color}20` : "rgba(255,255,255,0.03)",
+                                        border: `1px solid ${isPlaying ? m.color + "50" : "rgba(255,255,255,0.05)"}`,
+                                      }}
+                                    >
+                                      <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 transition-all"
+                                        style={{ backgroundColor: isPlaying ? m.color : `${m.color}20`, color: isPlaying ? "#0d0f1a" : m.color }}>
+                                        {isPlaying ? "⏸" : "▶"}
+                                      </span>
+                                      <span className="text-xs flex-1" style={{ color: isPlaying ? "white" : "rgba(255,255,255,0.65)" }}>{t.title}</span>
+                                      {isPlaying && <span className="text-xs font-bold animate-pulse" style={{ color: m.color }}>играет</span>}
+                                    </button>
+                                  );
+                                })}
                               </div>
                             </div>
-                            {/* Vibe + artists */}
                             <div className="flex flex-col gap-3">
                               <div>
                                 <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: `${m.color}80` }}>💡 Когда слушать</div>
-                                <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.65)" }}>{m.vibe}</p>
+                                <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.62)" }}>{m.vibe}</p>
                               </div>
                               <div>
                                 <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: `${m.color}80` }}>🎤 Артисты</div>
@@ -763,6 +843,50 @@ export default function Index() {
                   );
                 })}
               </div>
+
+              {/* ── Курт Кобейн Bio ────────────────────── */}
+              <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(248,113,113,0.25)", backgroundColor: "rgba(248,113,113,0.04)" }}>
+                <div className="h-1" style={{ background: "linear-gradient(90deg, #f87171, #fb923c, #f87171)" }} />
+                <div className="p-6">
+                  <div className="flex items-start gap-4 mb-5">
+                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0"
+                      style={{ backgroundColor: "rgba(248,113,113,0.12)", border: "1px solid rgba(248,113,113,0.25)" }}>
+                      🎸
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "rgba(248,113,113,0.6)" }}>Легенда рока</div>
+                      <h3 className="font-black text-white text-xl" style={{ fontFamily: "Unbounded, sans-serif" }}>{KURT_COBAIN.name}</h3>
+                      <div className="flex items-center gap-3 mt-1 text-xs" style={{ color: "rgba(255,255,255,0.38)" }}>
+                        <span>{KURT_COBAIN.years}</span>
+                        <span style={{ color: "#f87171" }}>•</span>
+                        <span>{KURT_COBAIN.role}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+                    {KURT_COBAIN.facts.map((fact, i) => (
+                      <div key={i} className="flex gap-3 p-3 rounded-xl"
+                        style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
+                        <span className="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-black"
+                          style={{ backgroundColor: "rgba(248,113,113,0.2)", color: "#f87171", minWidth: 20 }}>{i + 1}</span>
+                        <span className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.68)" }}>{fact}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="p-4 rounded-xl mb-4" style={{ backgroundColor: "rgba(248,113,113,0.08)", border: "1px solid rgba(248,113,113,0.2)" }}>
+                    <div className="text-xs font-bold mb-1.5" style={{ color: "#f87171" }}>✨ Цитата</div>
+                    <p className="text-sm italic" style={{ color: "rgba(255,255,255,0.72)" }}>{KURT_COBAIN.quote}</p>
+                  </div>
+
+                  <div>
+                    <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(248,113,113,0.6)" }}>Наследие</div>
+                    <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>{KURT_COBAIN.legacy}</p>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </section>
 
