@@ -5,7 +5,9 @@ const CATEGORIES = [
   { id: "all", label: "Всё", icon: "LayoutGrid" },
   { id: "guides", label: "Гайды", icon: "Gamepad2" },
   { id: "tips", label: "Советы", icon: "Lightbulb" },
+  { id: "newbie", label: "Новичкам", icon: "Star" },
   { id: "recipes", label: "Рецепты", icon: "ChefHat" },
+  { id: "books", label: "Книги", icon: "BookOpen" },
 ];
 
 const POSTS = [
@@ -35,6 +37,18 @@ const POSTS = [
   },
   {
     id: 3,
+    category: "guides",
+    tag: "Rust",
+    tagColor: "orange",
+    title: "Первая ночь в Rust",
+    desc: "Как выжить с самого старта: где найти камень и дерево, построить хижину и не умереть от мародёров.",
+    time: "10 мин",
+    difficulty: "Сложно",
+    image: null,
+    emoji: "🔥",
+  },
+  {
+    id: 4,
     category: "tips",
     tag: "CS2",
     tagColor: "orange",
@@ -46,19 +60,55 @@ const POSTS = [
     emoji: "🎯",
   },
   {
-    id: 4,
+    id: 5,
     category: "tips",
     tag: "Советы",
     tagColor: "green",
     title: "Управление ресурсами в играх",
-    desc: "Универсальные механики, которые работают в Minecraft, Subnautica и Don't Starve.",
+    desc: "Универсальные механики, которые работают в Minecraft, Rust, Subnautica и Don't Starve.",
     time: "6 мин",
     difficulty: "Легко",
     image: null,
     emoji: "🥫",
   },
   {
-    id: 5,
+    id: 6,
+    category: "newbie",
+    tag: "Новичкам",
+    tagColor: "green",
+    title: "С чего начать в Minecraft",
+    desc: "Пошаговый старт: первая ночь, добыча дерева, крафт инструментов и укрытие до рассвета.",
+    time: "7 мин",
+    difficulty: "Легко",
+    image: null,
+    emoji: "🌱",
+  },
+  {
+    id: 7,
+    category: "newbie",
+    tag: "Новичкам",
+    tagColor: "purple",
+    title: "Первый час в Subnautica",
+    desc: "Не паникуй! Объясняю как работает кислород, где строить базу и почему не стоит плыть вниз.",
+    time: "9 мин",
+    difficulty: "Легко",
+    image: null,
+    emoji: "🐟",
+  },
+  {
+    id: 8,
+    category: "newbie",
+    tag: "Новичкам",
+    tagColor: "orange",
+    title: "Rust для самых новеньких",
+    desc: "Объясняю механики простыми словами: крафт, строительство, где безопасно фармить первые ресурсы.",
+    time: "11 мин",
+    difficulty: "Легко",
+    image: null,
+    emoji: "🪓",
+  },
+  {
+    id: 9,
     category: "recipes",
     tag: "Рецепт",
     tagColor: "orange",
@@ -70,7 +120,7 @@ const POSTS = [
     emoji: "🍝",
   },
   {
-    id: 6,
+    id: 10,
     category: "recipes",
     tag: "Рецепт",
     tagColor: "purple",
@@ -80,6 +130,66 @@ const POSTS = [
     difficulty: "Легко",
     image: null,
     emoji: "🥪",
+  },
+  {
+    id: 11,
+    category: "recipes",
+    tag: "Рецепт",
+    tagColor: "green",
+    title: "Энергетический смузи",
+    desc: "Банан, овёс, молоко и мёд — заряд бодрости на несколько часов игры без вреда для здоровья.",
+    time: "5 мин",
+    difficulty: "Легко",
+    image: null,
+    emoji: "🥤",
+  },
+  {
+    id: 12,
+    category: "books",
+    tag: "Книга",
+    tagColor: "purple",
+    title: "Первый игрок готовься",
+    desc: "Эрнест Клайн. Виртуальный мир, загадки, ностальгия и эпичные отсылки к играм 80-х. Обязательно!",
+    time: "Роман",
+    difficulty: "12+",
+    image: null,
+    emoji: "📖",
+  },
+  {
+    id: 13,
+    category: "books",
+    tag: "Книга",
+    tagColor: "green",
+    title: "Голодные игры",
+    desc: "Сюзанна Коллинз. Выживание, стратегия, борьба за жизнь — если любишь survival игры, зайдёт на ура.",
+    time: "Трилогия",
+    difficulty: "12+",
+    image: null,
+    emoji: "🏹",
+  },
+  {
+    id: 14,
+    category: "books",
+    tag: "Книга",
+    tagColor: "orange",
+    title: "Марсианин",
+    desc: "Энди Вейр. Один человек выживает на Марсе с помощью науки и смекалки. Реальное выживание как в играх.",
+    time: "Роман",
+    difficulty: "13+",
+    image: null,
+    emoji: "🚀",
+  },
+  {
+    id: 15,
+    category: "books",
+    tag: "Книга",
+    tagColor: "purple",
+    title: "Автостопом по Галактике",
+    desc: "Дуглас Адамс. Безумно смешная и умная книга про приключения в космосе. Идеально для тех, кто любит Subnautica.",
+    time: "Серия",
+    difficulty: "12+",
+    image: null,
+    emoji: "🌌",
   },
 ];
 
@@ -93,6 +203,11 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   "Легко": "text-[#39d353]",
   "Средне": "text-[#ff6b35]",
   "Сложно": "text-[#b565ff]",
+  "12+": "text-[#b565ff]",
+  "13+": "text-[#ff6b35]",
+  "Роман": "text-muted-foreground",
+  "Трилогия": "text-muted-foreground",
+  "Серия": "text-muted-foreground",
 };
 
 export default function Index() {
@@ -115,10 +230,23 @@ export default function Index() {
               Guide<span className="text-[#39d353]">Master</span>
             </span>
           </div>
-          <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
-            <a href="#content" onClick={() => setActiveCategory("guides")} className="hover:text-foreground transition-colors">Гайды</a>
-            <a href="#content" onClick={() => setActiveCategory("tips")} className="hover:text-foreground transition-colors">Советы</a>
-            <a href="#content" onClick={() => setActiveCategory("recipes")} className="hover:text-foreground transition-colors">Рецепты</a>
+          <nav className="hidden md:flex items-center gap-5 text-sm text-muted-foreground">
+            {[
+              { label: "Гайды", cat: "guides" },
+              { label: "Советы", cat: "tips" },
+              { label: "Новичкам", cat: "newbie" },
+              { label: "Рецепты", cat: "recipes" },
+              { label: "Книги", cat: "books" },
+            ].map((n) => (
+              <a
+                key={n.cat}
+                href="#content"
+                onClick={() => setActiveCategory(n.cat)}
+                className="hover:text-foreground transition-colors"
+              >
+                {n.label}
+              </a>
+            ))}
           </nav>
           <button className="px-4 py-2 rounded-lg bg-[#39d353] text-black text-sm font-bold hover:bg-[#39d353]/90 transition-all neon-glow-green">
             Подписаться
@@ -130,6 +258,7 @@ export default function Index() {
       <section className="relative overflow-hidden pt-20 pb-24 px-4">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#39d353]/8 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#b565ff]/8 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-1/2 left-0 w-64 h-64 bg-[#ff6b35]/5 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="flex flex-col items-center text-center gap-6">
@@ -141,18 +270,27 @@ export default function Index() {
             <h1 className="animate-fade-in-up opacity-0 delay-100 text-4xl sm:text-6xl md:text-7xl font-black leading-[1.05] tracking-tight max-w-4xl">
               Играй лучше.
               <br />
-              <span className="text-[#39d353]">Готовь</span> вкуснее.
+              <span className="text-[#39d353]">Читай. Готовь.</span>
             </h1>
 
             <p className="animate-fade-in-up opacity-0 delay-200 text-muted-foreground text-lg max-w-xl leading-relaxed">
-              Гайды по Minecraft, Subnautica и CS2, советы по выживанию и рецепты для геймеров — всё в одном месте.
+              Гайды по Rust, Minecraft, Subnautica и CS2, советы новичкам, рецепты для геймеров и книги, которые стоит прочитать.
             </p>
 
-            <div className="animate-fade-in-up opacity-0 delay-300 flex items-center gap-8 mt-2">
+            {/* Game tags */}
+            <div className="animate-fade-in-up opacity-0 delay-300 flex flex-wrap justify-center gap-2">
+              {["⚒️ Minecraft", "🌊 Subnautica", "🔥 Rust", "🎯 CS2"].map((g) => (
+                <span key={g} className="px-3 py-1 rounded-full bg-secondary border border-border text-sm text-muted-foreground">
+                  {g}
+                </span>
+              ))}
+            </div>
+
+            <div className="animate-fade-in-up opacity-0 delay-400 flex items-center gap-8 mt-2">
               {[
-                { val: "6+", label: "материалов" },
-                { val: "3", label: "игры" },
-                { val: "100%", label: "от души" },
+                { val: "15+", label: "материалов" },
+                { val: "4", label: "игры" },
+                { val: "4", label: "книги" },
               ].map((s) => (
                 <div key={s.label} className="text-center">
                   <div className="text-2xl font-black text-[#39d353]">{s.val}</div>
@@ -189,14 +327,14 @@ export default function Index() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map((post, i) => {
             const colors = TAG_COLORS[post.tagColor];
+            const isBook = post.category === "books";
             return (
               <article
                 key={post.id}
                 className="card-hover cursor-pointer group bg-card border border-border rounded-2xl overflow-hidden"
-                style={{ animationDelay: `${i * 0.08}s` }}
               >
                 {/* Image / Emoji block */}
-                <div className="relative h-44 overflow-hidden bg-secondary flex items-center justify-center">
+                <div className={`relative overflow-hidden bg-secondary flex items-center justify-center ${isBook ? "h-36" : "h-44"}`}>
                   {post.image ? (
                     <img
                       src={post.image}
@@ -226,15 +364,15 @@ export default function Index() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <Icon name="Clock" size={12} />
+                        <Icon name={isBook ? "BookOpen" : "Clock"} size={12} />
                         {post.time}
                       </span>
-                      <span className={`font-semibold ${DIFFICULTY_COLORS[post.difficulty]}`}>
+                      <span className={`font-semibold ${DIFFICULTY_COLORS[post.difficulty] ?? "text-muted-foreground"}`}>
                         {post.difficulty}
                       </span>
                     </div>
                     <button className="flex items-center gap-1.5 text-xs font-bold text-[#39d353] hover:gap-2.5 transition-all">
-                      Читать
+                      {isBook ? "О книге" : "Читать"}
                       <Icon name="ArrowRight" size={13} />
                     </button>
                   </div>
@@ -243,13 +381,6 @@ export default function Index() {
             );
           })}
         </div>
-
-        {filtered.length === 0 && (
-          <div className="text-center py-20 text-muted-foreground">
-            <span className="text-5xl">🔍</span>
-            <p className="mt-4 text-lg">Материалов пока нет</p>
-          </div>
-        )}
       </section>
 
       {/* CTA Banner */}
@@ -257,10 +388,10 @@ export default function Index() {
         <div className="relative rounded-2xl overflow-hidden border border-[#39d353]/30 bg-[#39d353]/5 p-10 text-center">
           <div className="absolute inset-0 bg-gradient-to-br from-[#39d353]/5 via-transparent to-[#b565ff]/5 pointer-events-none" />
           <h3 className="relative text-2xl sm:text-3xl font-black mb-3">
-            Есть идея для гайда? 🎮
+            Есть идея? 🎮
           </h3>
           <p className="relative text-muted-foreground mb-6 max-w-md mx-auto">
-            Напиши мне — и я сделаю гайд по любой игре или рецепт для геймеров.
+            Хочешь гайд по конкретной игре, рецепт или совет по книге — напиши, и я добавлю!
           </p>
           <button className="relative px-8 py-3 rounded-xl bg-[#39d353] text-black font-bold hover:bg-[#39d353]/90 transition-all neon-glow-green">
             Предложить тему
@@ -276,9 +407,9 @@ export default function Index() {
           </span>
           <span>Сделано с ❤️ Артёмом, 13 лет</span>
           <div className="flex gap-5">
-            <a href="#content" className="hover:text-foreground transition-colors">Гайды</a>
-            <a href="#content" className="hover:text-foreground transition-colors">Советы</a>
-            <a href="#content" className="hover:text-foreground transition-colors">Рецепты</a>
+            <a href="#content" onClick={() => setActiveCategory("guides")} className="hover:text-foreground transition-colors cursor-pointer">Гайды</a>
+            <a href="#content" onClick={() => setActiveCategory("recipes")} className="hover:text-foreground transition-colors cursor-pointer">Рецепты</a>
+            <a href="#content" onClick={() => setActiveCategory("books")} className="hover:text-foreground transition-colors cursor-pointer">Книги</a>
           </div>
         </div>
       </footer>
