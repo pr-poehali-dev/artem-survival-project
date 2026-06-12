@@ -339,6 +339,54 @@ const BOOKS = [
   { emoji: "🌌", title: "Автостопом по Галактике",  author: "Дуглас Адамс",   desc: "Смешная и умная книга про приключения в космосе.",    age: "12+" },
 ];
 
+const MUSIC_GENRES = [
+  {
+    emoji: "🎸",
+    genre: "Рок",
+    color: "#f87171",
+    desc: "Энергия, гитары и драйв",
+    artists: ["AC/DC", "Nirvana", "Queen", "Metallica (ранний)"],
+    tracks: ["Bohemian Rhapsody — Queen", "Smells Like Teen Spirit — Nirvana", "Back in Black — AC/DC", "Highway to Hell — AC/DC"],
+    vibe: "Включай когда хочется адреналина или нужно взбодриться. Идеально под Rust и CS2.",
+  },
+  {
+    emoji: "🤘",
+    genre: "Металл",
+    color: "#94a3b8",
+    desc: "Мощь, скорость, тяжесть",
+    artists: ["Metallica", "Slipknot", "System of a Down", "Rammstein"],
+    tracks: ["Master of Puppets — Metallica", "Chop Suey! — SOAD", "Enter Sandman — Metallica", "Du Hast — Rammstein"],
+    vibe: "Для самых напряжённых моментов в игре. Когда тебя рейдят в Rust — включай это.",
+  },
+  {
+    emoji: "🎷",
+    genre: "Джаз",
+    color: "#fbbf24",
+    desc: "Атмосфера, импровизация, стиль",
+    artists: ["Miles Davis", "John Coltrane", "Louis Armstrong", "Dave Brubeck"],
+    tracks: ["So What — Miles Davis", "Take Five — Dave Brubeck", "What a Wonderful World — Armstrong", "My Favorite Things — Coltrane"],
+    vibe: "Для чтения книг, готовки или просто спокойного вечера. Создаёт особую атмосферу.",
+  },
+  {
+    emoji: "🔊",
+    genre: "Фонк",
+    color: "#e879f9",
+    desc: "Ритм, бас, groove",
+    artists: ["Soudiere", "Kordhell", "SXMPXSON", "Night Lovell"],
+    tracks: ["Murder in My Mind — Kordhell", "Freak — Soudiere", "Dark Light — SXMPXSON", "Contraband — Night Lovell"],
+    vibe: "Лучший жанр для ночных сессий в Minecraft или когда просто надо почувствовать себя крутым.",
+  },
+  {
+    emoji: "🎬",
+    genre: "Из фильмов",
+    color: "#60a5fa",
+    desc: "Саундтреки, которые цепляют",
+    artists: ["Hans Zimmer", "John Williams", "Ennio Morricone", "Howard Shore"],
+    tracks: ["Interstellar Main Theme — Zimmer", "Imperial March — Williams", "The Good The Bad — Morricone", "Concerning Hobbits — Shore"],
+    vibe: "Для эпичных моментов. Под «Героев Меча и Магии» или чтение — самое то. Мурашки гарантированы.",
+  },
+];
+
 const DIFF_COLOR: Record<string, string> = {
   "Легко": "#4ade80", "Средне": "#fb923c", "Сложно": "#f87171",
 };
@@ -368,9 +416,11 @@ const BG_URL = "https://cdn.poehali.dev/projects/06505539-a43e-4fc8-b125-1c85c59
 
 export default function Index() {
   const [modal, setModal] = useState<ModalData | null>(null);
+  const [expandedMusic, setExpandedMusic] = useState<string | null>(null);
   const gamesSection  = useInView();
   const foodSection   = useInView();
   const booksSection  = useInView();
+  const musicSection  = useInView();
   const aboutSection  = useInView();
 
   const scrollTo = (id: string) =>
@@ -423,7 +473,7 @@ export default function Index() {
               Artём<span className="text-[#4ade80]">.space</span>
             </span>
             <nav className="hidden md:flex items-center gap-6 text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>
-              {[["🎮 Игры","games"],["🍳 Кулинария","food"],["📚 Книги","books"],["👋 Обо мне","about"]].map(([l,id]) => (
+              {[["🎮 Игры","games"],["🍳 Кулинария","food"],["📚 Книги","books"],["🎵 Музыка","music"],["👋 Обо мне","about"]].map(([l,id]) => (
                 <button key={id} onClick={() => scrollTo(id as string)} className="transition-colors hover:text-white">{l}</button>
               ))}
             </nav>
@@ -622,11 +672,109 @@ export default function Index() {
             <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent)" }} />
           </div>
 
+          {/* ── MUSIC ─────────────────────────────────── */}
+          <section id="music" ref={musicSection.ref} className="max-w-5xl mx-auto px-5 py-16">
+            <div className={`transition-all duration-700 ${musicSection.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+              <div className="mb-8">
+                <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(248,113,113,0.55)" }}>— блок 04</div>
+                <h2 className="text-4xl font-black text-white" style={{ fontFamily: "Unbounded, sans-serif" }}>Музыка 🎵</h2>
+                <p className="mt-2 text-sm" style={{ color: "rgba(255,255,255,0.38)" }}>Нажми на жанр — покажу треки и под что слушать</p>
+              </div>
+              <div className="flex flex-col gap-3">
+                {MUSIC_GENRES.map((m, i) => {
+                  const isOpen = expandedMusic === m.genre;
+                  return (
+                    <div key={i}
+                      className="rounded-2xl overflow-hidden cursor-pointer transition-all duration-300"
+                      style={{
+                        backgroundColor: isOpen ? `${m.color}0d` : "rgba(255,255,255,0.03)",
+                        border: `1px solid ${isOpen ? m.color + "40" : "rgba(255,255,255,0.08)"}`,
+                        animation: musicSection.visible ? `card-appear 0.4s ${i * 0.08}s ease both` : "none",
+                      }}
+                      onClick={() => setExpandedMusic(isOpen ? null : m.genre)}
+                    >
+                      {/* Header row */}
+                      <div className="flex items-center gap-4 p-4">
+                        <div className="w-11 h-11 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
+                          style={{ backgroundColor: `${m.color}15`, border: `1px solid ${m.color}25` }}>
+                          {m.emoji}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <span className="font-black text-white text-sm" style={{ fontFamily: "Unbounded, sans-serif" }}>{m.genre}</span>
+                            <span className="text-xs px-2 py-0.5 rounded-full font-semibold"
+                              style={{ color: m.color, backgroundColor: `${m.color}15`, border: `1px solid ${m.color}25` }}>
+                              {m.artists.length} артиста
+                            </span>
+                          </div>
+                          <p className="text-xs" style={{ color: "rgba(255,255,255,0.38)" }}>{m.desc}</p>
+                        </div>
+                        {/* Tags */}
+                        <div className="hidden sm:flex gap-1.5 flex-shrink-0">
+                          {m.artists.slice(0,2).map((a) => (
+                            <span key={a} className="text-xs px-2 py-0.5 rounded-full" style={{ color: "rgba(255,255,255,0.3)", border: "1px solid rgba(255,255,255,0.07)" }}>{a}</span>
+                          ))}
+                        </div>
+                        <div className="flex-shrink-0 ml-2 transition-transform duration-300" style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", color: m.color }}>
+                          <Icon name="ChevronDown" size={18} />
+                        </div>
+                      </div>
+
+                      {/* Expanded content */}
+                      {isOpen && (
+                        <div className="px-4 pb-5" style={{ borderTop: `1px solid ${m.color}20` }}>
+                          <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {/* Tracks */}
+                            <div>
+                              <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: `${m.color}80` }}>🎵 Треки</div>
+                              <div className="flex flex-col gap-2">
+                                {m.tracks.map((t, ti) => (
+                                  <div key={ti} className="flex items-center gap-3 p-2.5 rounded-xl"
+                                    style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
+                                    <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0"
+                                      style={{ backgroundColor: `${m.color}20`, color: m.color }}>{ti + 1}</span>
+                                    <span className="text-xs text-white/70">{t}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            {/* Vibe + artists */}
+                            <div className="flex flex-col gap-3">
+                              <div>
+                                <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: `${m.color}80` }}>💡 Когда слушать</div>
+                                <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.65)" }}>{m.vibe}</p>
+                              </div>
+                              <div>
+                                <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: `${m.color}80` }}>🎤 Артисты</div>
+                                <div className="flex flex-wrap gap-2">
+                                  {m.artists.map((a) => (
+                                    <span key={a} className="px-3 py-1 rounded-full text-xs font-semibold"
+                                      style={{ backgroundColor: `${m.color}12`, border: `1px solid ${m.color}25`, color: "rgba(255,255,255,0.8)" }}>
+                                      {a}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+
+          <div className="max-w-5xl mx-auto px-5">
+            <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent)" }} />
+          </div>
+
           {/* ── ABOUT ─────────────────────────────────── */}
           <section id="about" ref={aboutSection.ref} className="max-w-5xl mx-auto px-5 py-16 pb-20">
             <div className={`transition-all duration-700 ${aboutSection.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
               <div className="mb-8">
-                <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(96,165,250,0.55)" }}>— блок 04</div>
+                <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(96,165,250,0.55)" }}>— блок 05</div>
                 <h2 className="text-4xl font-black text-white" style={{ fontFamily: "Unbounded, sans-serif" }}>Обо мне 👋</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -677,7 +825,7 @@ export default function Index() {
               </span>
               <span>Сделано с ❤️ Артёмом, 13 лет</span>
               <div className="flex gap-4">
-                {[["Игры","games"],["Книги","books"],["Кулинария","food"],["Обо мне","about"]].map(([l,id]) => (
+                {[["Игры","games"],["Книги","books"],["Кулинария","food"],["Музыка","music"],["Обо мне","about"]].map(([l,id]) => (
                   <button key={id} onClick={() => scrollTo(id)} className="hover:text-white transition-colors">{l}</button>
                 ))}
               </div>
