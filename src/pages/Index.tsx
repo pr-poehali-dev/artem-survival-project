@@ -379,9 +379,10 @@ const MUSIC_GENRES = [
     desc: "Мощь, скорость, тяжесть",
     artists: ["Metallica", "Slipknot", "System of a Down", "Rammstein"],
     tracks: [
-      { title: "Master of Puppets — Metallica", ytId: "xopY5L_bgFQ" },
-      { title: "Chop Suey! — SOAD",             ytId: "CSvFpBOe8eY" },
-      { title: "Enter Sandman — Metallica",      ytId: "CD-E-LDc384" },
+      { title: "Psychosocial — Slipknot",        ytId: "O1RFgEFdUoM" },
+      { title: "Before I Forget — Slipknot",     ytId: "bDIoLlEXPGE" },
+      { title: "Master of Puppets — Metallica",  ytId: "xopY5L_bgFQ" },
+      { title: "Chop Suey! — System of a Down",  ytId: "CSvFpBOe8eY" },
       { title: "Du Hast — Rammstein",            ytId: "W3q8Od5qJio" },
     ],
     vibe: "Для самых напряжённых моментов в игре. Когда тебя рейдят в Rust — включай это.",
@@ -925,17 +926,53 @@ export default function Index() {
                   ))}
                 </div>
               </div>
-              <div className="rounded-2xl p-7 text-center relative overflow-hidden gradient-border"
-                style={{ backgroundColor: "rgba(74,222,128,0.04)" }}>
-                <div className="absolute inset-0 pointer-events-none"
-                  style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(74,222,128,0.08) 0%, transparent 70%)" }} />
-                <p className="relative text-sm mb-5" style={{ color: "rgba(255,255,255,0.5)" }}>
-                  Хочешь предложить тему для гайда или рецепта?
-                </p>
-                <button className="relative px-7 py-3 rounded-full font-bold text-sm transition-all hover:scale-105 neon-glow-green"
-                  style={{ backgroundColor: "#4ade80", color: "#0d0f1a" }}>
-                  Написать мне ✉️
-                </button>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Написать мне */}
+                <div className="rounded-2xl p-6 text-center relative overflow-hidden gradient-border"
+                  style={{ backgroundColor: "rgba(74,222,128,0.04)" }}>
+                  <div className="absolute inset-0 pointer-events-none"
+                    style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(74,222,128,0.08) 0%, transparent 70%)" }} />
+                  <div className="relative text-3xl mb-3">✉️</div>
+                  <h4 className="relative font-black text-white text-sm mb-2" style={{ fontFamily: "Unbounded, sans-serif" }}>Написать мне</h4>
+                  <p className="relative text-xs mb-4" style={{ color: "rgba(255,255,255,0.45)" }}>
+                    Хочешь предложить тему для гайда или рецепта?
+                  </p>
+                  <button className="relative px-6 py-2.5 rounded-full font-bold text-sm transition-all hover:scale-105 neon-glow-green"
+                    style={{ backgroundColor: "#4ade80", color: "#0d0f1a" }}>
+                    Написать ✉️
+                  </button>
+                </div>
+
+                {/* Донат */}
+                <div id="donate" className="rounded-2xl p-6 text-center relative overflow-hidden"
+                  style={{ backgroundColor: "rgba(251,191,36,0.04)", border: "1px solid rgba(251,191,36,0.2)" }}>
+                  <div className="absolute inset-0 pointer-events-none"
+                    style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(251,191,36,0.07) 0%, transparent 70%)" }} />
+                  <div className="relative text-3xl mb-3 animate-float">☕</div>
+                  <h4 className="relative font-black text-white text-sm mb-2" style={{ fontFamily: "Unbounded, sans-serif" }}>Поддержать автора</h4>
+                  <p className="relative text-xs mb-5" style={{ color: "rgba(255,255,255,0.45)" }}>
+                    Если сайт нравится — можешь угостить меня кофе ☕ Это помогает делать больше гайдов и рецептов!
+                  </p>
+                  <div className="relative flex flex-col gap-2">
+                    {[
+                      { label: "☕ Кофе — 50 руб",   amount: "50" },
+                      { label: "🍕 Пицца — 200 руб",  amount: "200" },
+                      { label: "🎮 Игра — 500 руб",   amount: "500" },
+                    ].map((tier) => (
+                      <button key={tier.amount}
+                        className="w-full px-4 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105"
+                        style={{ backgroundColor: "rgba(251,191,36,0.12)", border: "1px solid rgba(251,191,36,0.25)", color: "#fbbf24" }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(251,191,36,0.22)"; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(251,191,36,0.12)"; }}
+                      >
+                        {tier.label}
+                      </button>
+                    ))}
+                    <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.2)" }}>
+                      Реквизиты появятся после настройки
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
