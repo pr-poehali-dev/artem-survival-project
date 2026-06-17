@@ -354,9 +354,13 @@ export default function Index() {
                   </p>
                   <div className="relative flex flex-col gap-2">
                     {[
-                      { label: "☕ Кофе — 50 руб",  amount: "50"  },
-                      { label: "🍕 Пицца — 200 руб", amount: "200" },
-                      { label: "🎮 Игра — 500 руб",  amount: "500" },
+                      { label: "💸 100 руб",          amount: "100"  },
+                      { label: "☕ Кофе — 120 руб",   amount: "120"  },
+                      { label: "💰 500 руб",           amount: "500"  },
+                      { label: "🍕 Пицца — 720 руб",  amount: "720"  },
+                      { label: "🎮 Игра — 300 руб",   amount: "300"  },
+                      { label: "🏆 1 000 руб",        amount: "1000" },
+                      { label: "👑 2 500 руб",        amount: "2500" },
                     ].map((tier) => (
                       <button key={tier.amount}
                         className="w-full px-4 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105"
