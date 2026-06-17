@@ -335,10 +335,11 @@ export default function Index() {
                   <p className="relative text-xs mb-4" style={{ color: "rgba(255,255,255,0.45)" }}>
                     Хочешь предложить тему для гайда или рецепта?
                   </p>
-                  <button className="relative px-6 py-2.5 rounded-full font-bold text-sm transition-all hover:scale-105 neon-glow-green"
+                  <a href="https://t.me/Doktop9890" target="_blank" rel="noreferrer"
+                    className="relative inline-block px-6 py-2.5 rounded-full font-bold text-sm transition-all hover:scale-105 neon-glow-green"
                     style={{ backgroundColor: "#4ade80", color: "#0d0f1a" }}>
                     Написать ✉️
-                  </button>
+                  </a>
                 </div>
 
                 {/* Донат */}
