@@ -333,10 +333,9 @@ export default function Index() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="rounded-2xl p-7" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                  <div className="text-5xl mb-4 animate-float">🧑‍💻</div>
-                  <h3 className="font-black text-white text-xl mb-3" style={{ fontFamily: "Unbounded, sans-serif" }}>Привет, я Артём!</h3>
+                  <h3 className="font-black text-white text-xl mb-3" style={{ fontFamily: "Unbounded, sans-serif" }}>Привет, я Существительное!</h3>
                   <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.58)" }}>
-                    Мне 13 лет. Я геймер, кулинар-любитель и книголюб. Этот сайт я сделал, чтобы делиться гайдами по играм, рецептами и книжными советами. Здесь нет нудятины — только то, что реально интересно.
+                    Я геймер, кулинар-любитель и книголюб. Этот сайт я сделал, чтобы делиться гайдами по играм, рецептами и книжными советами. Здесь нет нудятины — только то, что реально интересно.
                   </p>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
