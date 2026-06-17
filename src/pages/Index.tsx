@@ -24,6 +24,7 @@ function useInView(threshold = 0.12) {
 
 export default function Index() {
   const [modal, setModal] = useState<ModalData | null>(null);
+  const [donateTier, setDonateTier] = useState<string | null>(null);
   const gamesSection    = useInView();
   const foodSection     = useInView();
   const booksSection    = useInView();
@@ -40,6 +41,36 @@ export default function Index() {
 
   return (
     <>
+      {donateTier && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          style={{ backgroundColor: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)" }}
+          onClick={() => setDonateTier(null)}>
+          <div className="w-full max-w-sm rounded-2xl overflow-hidden animate-fade-in-up"
+            style={{ backgroundColor: "#0f1120", border: "1px solid rgba(251,191,36,0.3)" }}
+            onClick={e => e.stopPropagation()}>
+            <div className="h-1" style={{ background: "linear-gradient(90deg, #fbbf24, #fb923c)" }} />
+            <div className="p-6 text-center">
+              <div className="text-4xl mb-3">☕</div>
+              <h3 className="font-black text-white text-lg mb-1" style={{ fontFamily: "Unbounded, sans-serif" }}>
+                Спасибо, что решились мне задонатить!
+              </h3>
+              <p className="text-xs mb-6" style={{ color: "rgba(255,255,255,0.45)" }}>Переводи на сумму: <span className="font-bold" style={{ color: "#fbbf24" }}>{donateTier} руб</span></p>
+              <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.25)" }}>
+                <div className="flex items-center justify-center gap-3">
+                  <span className="text-2xl font-black text-white tracking-wide">+7 (925) 315-05-68</span>
+                  <span className="px-2 py-1 rounded-lg text-xs font-bold" style={{ backgroundColor: "rgba(34,197,94,0.15)", border: "1px solid rgba(34,197,94,0.3)", color: "#4ade80" }}>Сбер</span>
+                </div>
+              </div>
+              <button onClick={() => setDonateTier(null)}
+                className="text-xs px-5 py-2 rounded-full transition-colors hover:bg-white/10"
+                style={{ color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {modal && <Modal data={modal} onClose={() => setModal(null)} />}
 
       <div className="min-h-screen" style={{ color: "#f0f0f8" }}>
@@ -363,6 +394,7 @@ export default function Index() {
                       { label: "👑 2 500 руб",        amount: "2500" },
                     ].map((tier) => (
                       <button key={tier.amount}
+                        onClick={() => setDonateTier(tier.amount)}
                         className="w-full px-4 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105"
                         style={{ backgroundColor: "rgba(251,191,36,0.12)", border: "1px solid rgba(251,191,36,0.25)", color: "#fbbf24" }}
                         onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(251,191,36,0.22)"; }}
@@ -371,9 +403,7 @@ export default function Index() {
                         {tier.label}
                       </button>
                     ))}
-                    <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.2)" }}>
-                      Реквизиты появятся после настройки
-                    </p>
+
                   </div>
                 </div>
               </div>
