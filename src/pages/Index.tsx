@@ -343,7 +343,6 @@ export default function Index() {
                     ["🎮","Играю","Rust, Minecraft\nSubnautica, CS2\nPoppy, HoMM","#4ade80"],
                     ["📚","Читаю","Фантастику\nи приключения","#b565ff"],
                     ["🍳","Готовлю","Быстро\nи вкусно","#fb923c"],
-                    ["🏗️","Собираю","Lego\nи конструкторы","#60a5fa"],
                   ] as [string,string,string,string][]).map(([emoji,title,desc,color]) => (
                     <div key={title} className="rounded-xl p-4 transition-transform hover:scale-105"
                       style={{ backgroundColor: `${color}0a`, border: `1px solid ${color}20` }}>
