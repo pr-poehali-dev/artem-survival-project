@@ -127,13 +127,13 @@ export default function Index() {
             <div className="animate-fade-in-up delay-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6"
               style={{ color: "#4ade80", backgroundColor: "rgba(74,222,128,0.1)", border: "1px solid rgba(74,222,128,0.25)" }}>
               <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80]" style={{ animation: "pulse-glow 2s infinite" }} />
-              13 лет · Геймер · Повар · Читатель
+              Геймер · Повар · Читатель
             </div>
             <div className="flex flex-col md:flex-row items-start md:items-center gap-10">
               <div className="flex-1">
                 <h1 className="animate-fade-in-up delay-100 text-5xl sm:text-7xl font-black leading-[0.95] tracking-tight mb-5 text-white"
                   style={{ fontFamily: "Unbounded, sans-serif" }}>
-                  Привет,<br />я <span className="shimmer-text">Артём</span> ✌️
+                  Привет,<br />я <span className="shimmer-text">Существительное</span> ✌️
                 </h1>
                 <p className="animate-fade-in-up delay-200 text-lg leading-relaxed mb-8"
                   style={{ color: "rgba(255,255,255,0.65)", maxWidth: "460px" }}>
