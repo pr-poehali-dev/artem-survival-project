@@ -959,7 +959,7 @@ export default function Index() {
                 {/* Карта */}
                 <div className="relative rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(124,58,237,0.35)", minHeight: 220 }}>
                   <img
-                    src="https://cdn.poehali.dev/projects/06505539-a43e-4fc8-b125-1c85c59141c8/files/49c5c9d5-e619-4a00-9719-5cc8b2c98aa0.jpg"
+                    src="https://cdn.poehali.dev/projects/06505539-a43e-4fc8-b125-1c85c59141c8/bucket/6b9165de-d715-4811-9d7b-305a8d35ce7b.png"
                     alt="Карта Фортнайта"
                     className="w-full h-full object-cover"
                     style={{ minHeight: 220 }}
