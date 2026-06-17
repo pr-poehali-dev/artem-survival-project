@@ -384,6 +384,7 @@ const MUSIC_GENRES = [
       { title: "Master of Puppets — Metallica",  ytId: "xopY5L_bgFQ" },
       { title: "Chop Suey! — System of a Down",  ytId: "CSvFpBOe8eY" },
       { title: "Du Hast — Rammstein",            ytId: "W3q8Od5qJio" },
+      { title: "Sonne — Rammstein",              ytId: "StZcUAPRRac" },
     ],
     vibe: "Для самых напряжённых моментов в игре. Когда тебя рейдят в Rust — включай это.",
   },
