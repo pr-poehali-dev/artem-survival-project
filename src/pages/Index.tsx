@@ -932,7 +932,7 @@ export default function Index() {
 
               {/* Header */}
               <div className="mb-8">
-                <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(167,139,250,0.6)" }}>— спец. блок</div>
+                <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(167,139,250,0.6)" }}>— для брата</div>
                 <div className="flex items-center gap-3">
                   <h2 className="text-4xl font-black text-white" style={{ fontFamily: "Unbounded, sans-serif" }}>Fortnite</h2>
                   <span className="text-4xl">🎯</span>
@@ -940,18 +940,35 @@ export default function Index() {
                 <p className="mt-2 text-sm" style={{ color: "rgba(255,255,255,0.38)" }}>Гайды, советы, оружие и скины — всё что надо знать</p>
               </div>
 
-              {/* Decorative banner */}
-              <div className="relative rounded-2xl overflow-hidden mb-8 p-7"
-                style={{ background: "linear-gradient(135deg, rgba(124,58,237,0.2) 0%, rgba(124,58,237,0.05) 50%, rgba(167,139,250,0.1) 100%)", border: "1px solid rgba(124,58,237,0.35)" }}>
-                <div className="absolute top-0 right-0 text-[120px] leading-none select-none pointer-events-none" style={{ opacity: 0.08 }}>🎯</div>
-                <div className="relative z-10">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold mb-3"
-                    style={{ backgroundColor: "rgba(124,58,237,0.2)", border: "1px solid rgba(124,58,237,0.4)", color: "#a78bfa" }}>
-                    ⚡ Battle Royale · 100 игроков · 1 победитель
+              {/* Decorative banner + карта */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div className="relative rounded-2xl overflow-hidden p-7"
+                  style={{ background: "linear-gradient(135deg, rgba(124,58,237,0.2) 0%, rgba(124,58,237,0.05) 50%, rgba(167,139,250,0.1) 100%)", border: "1px solid rgba(124,58,237,0.35)" }}>
+                  <div className="absolute top-0 right-0 text-[120px] leading-none select-none pointer-events-none" style={{ opacity: 0.08 }}>🎯</div>
+                  <div className="relative z-10">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold mb-3"
+                      style={{ backgroundColor: "rgba(124,58,237,0.2)", border: "1px solid rgba(124,58,237,0.4)", color: "#a78bfa" }}>
+                      ⚡ Battle Royale · 100 игроков · 1 победитель
+                    </div>
+                    <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.65)" }}>
+                      Фортнайт — это не просто стрелялка. Это строительство, стратегия и быстрые реакции одновременно. Здесь нужно уметь всё: строить, целиться и думать быстрее противника.
+                    </p>
                   </div>
-                  <p className="text-sm leading-relaxed max-w-lg" style={{ color: "rgba(255,255,255,0.65)" }}>
-                    Фортнайт — это не просто стрелялка. Это строительство, стратегия и быстрые реакции одновременно. Здесь нужно уметь всё: строить, целиться и думать быстрее противника.
-                  </p>
+                </div>
+
+                {/* Карта */}
+                <div className="relative rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(124,58,237,0.35)", minHeight: 220 }}>
+                  <img
+                    src="https://cdn.poehali.dev/projects/06505539-a43e-4fc8-b125-1c85c59141c8/files/49c5c9d5-e619-4a00-9719-5cc8b2c98aa0.jpg"
+                    alt="Карта Фортнайта"
+                    className="w-full h-full object-cover"
+                    style={{ minHeight: 220 }}
+                  />
+                  <div className="absolute inset-0 pointer-events-none"
+                    style={{ background: "linear-gradient(to top, rgba(13,15,26,0.7) 0%, transparent 50%)" }} />
+                  <div className="absolute bottom-3 left-4 right-4">
+                    <span className="text-xs font-bold" style={{ color: "#a78bfa" }}>🗺️ Карта острова</span>
+                  </div>
                 </div>
               </div>
 
