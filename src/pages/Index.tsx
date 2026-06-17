@@ -422,14 +422,14 @@ const MUSIC_GENRES = [
     desc: "Саундтреки, которые цепляют",
     artists: ["Hans Zimmer", "John Williams", "Ennio Morricone", "Howard Shore", "Michael Giacchino"],
     tracks: [
-      { title: "Interstellar Main Theme — Zimmer",          ytId: "UDVtMYqUAyw" },
-      { title: "Imperial March — Williams",                  ytId: "3LXVAn56YI8" },
-      { title: "The Good The Bad — Morricone",               ytId: "h1PfrmgVZPU" },
-      { title: "Concerning Hobbits — Shore",                 ytId: "FHU2o0LxVQY" },
-      { title: "Jurassic Park Theme — John Williams",           ytId: "dCGet-mSFMU" },
-      { title: "Welcome to Jurassic World — Giacchino",         ytId: "XrFonMvNuAE" },
-      { title: "Jurassic Park Suite — Williams (concert)",      ytId: "7vThuwa5RZk" },
-      { title: "Jurassic World — End Credits — Giacchino",      ytId: "BQRE8CSlq3o" },
+      { title: "Interstellar Main Theme — Zimmer",              ytId: "UDVtMYqUAyw" },
+      { title: "Imperial March — Williams",                      ytId: "3LXVAn56YI8" },
+      { title: "The Good The Bad — Morricone",                   ytId: "h1PfrmgVZPU" },
+      { title: "Concerning Hobbits — Shore",                     ytId: "FHU2o0LxVQY" },
+      { title: "Jurassic Park Theme — John Williams",            ytId: "dCGet-mSFMU", vkId: "-2000463951_456463951" },
+      { title: "Welcome to Jurassic World — Giacchino",          ytId: "XrFonMvNuAE", vkId: "-2000540892_456540892" },
+      { title: "Jurassic Park Suite — Williams (concert)",       ytId: "7vThuwa5RZk", vkId: "-2000392329_456392329" },
+      { title: "Jurassic World — End Credits — Giacchino",       ytId: "BQRE8CSlq3o", vkId: "-2000291791_456291791" },
     ],
     vibe: "Для эпичных моментов. Под «Героев Меча и Магии» или чтение — самое то. Мурашки гарантированы. А Парк Юрского Периода — это вообще топ для чтения книг про динозавров.",
   },
@@ -495,7 +495,8 @@ const BG_URL = "https://cdn.poehali.dev/projects/06505539-a43e-4fc8-b125-1c85c59
 export default function Index() {
   const [modal, setModal] = useState<ModalData | null>(null);
   const [expandedMusic, setExpandedMusic] = useState<string | null>(null);
-  const [playingTrack, setPlayingTrack] = useState<{ ytId: string; title: string; color: string } | null>(null);
+  const [playingTrack, setPlayingTrack] = useState<{ ytId: string; title: string; color: string; vkSearch?: string } | null>(null);
+  const [ytError, setYtError] = useState(false);
   const gamesSection    = useInView();
   const foodSection     = useInView();
   const booksSection    = useInView();
@@ -775,15 +776,46 @@ export default function Index() {
                       ✕ Стоп
                     </button>
                   </div>
-                  <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-                    <iframe
-                      className="absolute inset-0 w-full h-full"
-                      src={`https://www.youtube.com/embed/${playingTrack.ytId}?autoplay=1&rel=0`}
-                      allow="autoplay; encrypted-media"
-                      allowFullScreen
-                      title={playingTrack.title}
-                    />
-                  </div>
+                  {ytError ? (
+                    <div className="flex flex-col items-center justify-center gap-4 py-10 px-6">
+                      <div className="text-4xl">😔</div>
+                      <div className="text-center">
+                        <div className="font-bold text-white text-sm mb-1">YouTube заблокирован</div>
+                        <div className="text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>Открой трек в другом месте</div>
+                      </div>
+                      <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
+                        <a href={`https://vk.com/audio?q=${encodeURIComponent(playingTrack.title)}`} target="_blank" rel="noreferrer"
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-white transition-all hover:scale-105"
+                          style={{ backgroundColor: "#4680c2", border: "1px solid rgba(70,128,194,0.5)" }}>
+                          🎵 VK Музыка
+                        </a>
+                        <a href={`https://music.yandex.ru/search?text=${encodeURIComponent(playingTrack.title)}`} target="_blank" rel="noreferrer"
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-white transition-all hover:scale-105"
+                          style={{ backgroundColor: "rgba(255,204,0,0.15)", border: "1px solid rgba(255,204,0,0.4)", color: "#ffcc00" }}>
+                          🎶 Яндекс Музыка
+                        </a>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                      <iframe
+                        key={playingTrack.ytId}
+                        className="absolute inset-0 w-full h-full"
+                        src={`https://www.youtube.com/embed/${playingTrack.ytId}?autoplay=1&rel=0`}
+                        allow="autoplay; encrypted-media"
+                        allowFullScreen
+                        title={playingTrack.title}
+                        onError={() => setYtError(true)}
+                      />
+                      <div className="absolute bottom-2 right-2 z-10">
+                        <button onClick={() => setYtError(true)}
+                          className="text-xs px-2 py-1 rounded-lg"
+                          style={{ backgroundColor: "rgba(0,0,0,0.6)", color: "rgba(255,255,255,0.4)" }}>
+                          Не работает?
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -837,7 +869,7 @@ export default function Index() {
                                   const isPlaying = playingTrack?.ytId === t.ytId;
                                   return (
                                     <button key={ti}
-                                      onClick={() => setPlayingTrack(isPlaying ? null : { ytId: t.ytId, title: t.title, color: m.color })}
+                                      onClick={() => { setYtError(false); setPlayingTrack(isPlaying ? null : { ytId: t.ytId, title: t.title, color: m.color }); }}
                                       className="flex items-center gap-3 p-2.5 rounded-xl w-full text-left transition-all duration-200 group"
                                       style={{
                                         backgroundColor: isPlaying ? `${m.color}20` : "rgba(255,255,255,0.03)",
